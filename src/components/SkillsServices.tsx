@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 interface SkillItem {
   id: string;
@@ -21,10 +21,111 @@ interface ServiceItem {
   icon: React.ReactNode;
 }
 
+interface AnimatedMetricProps {
+  value: number;
+  suffix?: string;
+  prefix?: string;
+  label: string;
+  isVisible: boolean;
+  className?: string;
+  duration?: number;
+}
+
+function AnimatedMetric({
+  value,
+  suffix = "",
+  prefix = "",
+  label,
+  isVisible,
+  className = "",
+  duration = 1800,
+}: AnimatedMetricProps) {
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    let animationFrameId: number;
+    let startTime: number | null = null;
+
+    if (isVisible) {
+      setDisplayValue(0);
+
+      // Smooth ease-out curve (quartic)
+      const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 4);
+
+      const updateCounter = (currentTime: number) => {
+        if (!startTime) startTime = currentTime;
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easedProgress = easeOutQuart(progress);
+        const currentVal = Math.round(easedProgress * value);
+
+        setDisplayValue(currentVal);
+
+        if (progress < 1) {
+          animationFrameId = requestAnimationFrame(updateCounter);
+        } else {
+          setDisplayValue(value);
+        }
+      };
+
+      animationFrameId = requestAnimationFrame(updateCounter);
+    } else {
+      // Reset when scrolled out of view so it auto-counts every time it enters view
+      setDisplayValue(0);
+    }
+
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+  }, [isVisible, value, duration]);
+
+  return (
+    <div className={`flex flex-col items-center justify-center text-center px-4 py-1 ${className}`}>
+      <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900 tabular-nums select-none transition-transform duration-200">
+        {prefix}
+        {displayValue}
+        {suffix}
+      </span>
+      <span className="text-xs sm:text-[13px] font-medium text-zinc-500 mt-1">
+        {label}
+      </span>
+    </div>
+  );
+}
+
 export default function SkillsServices() {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [hoveredSkill, setHoveredSkill] = useState<SkillItem | null>(null);
   const [activeServiceId, setActiveServiceId] = useState<string>("production");
+
+  // Metrics observer to trigger counting animation every time the section enters viewport
+  const metricsRef = useRef<HTMLDivElement>(null);
+  const [isMetricsVisible, setIsMetricsVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Triggers every time the element enters or exits the viewport
+        setIsMetricsVisible(entry.isIntersecting);
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of the metrics container is visible
+      }
+    );
+
+    const el = metricsRef.current;
+    if (el) {
+      observer.observe(el);
+    }
+
+    return () => {
+      if (el) {
+        observer.unobserve(el);
+      }
+    };
+  }, []);
 
   const SKILLS: SkillItem[] = [
     {
@@ -575,43 +676,49 @@ export default function SkillsServices() {
         {/* ========================================================= */}
         {/* SEPARATE HORIZONTAL METRICS CONTAINER                      */}
         {/* ========================================================= */}
-        <div className="mt-8 sm:mt-10 w-full bg-[#f5f5f7] border border-zinc-200/70 rounded-[28px] sm:rounded-[32px] p-6 sm:p-7 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] transition-shadow duration-300">
+        <div
+          ref={metricsRef}
+          className="mt-8 sm:mt-10 w-full bg-[#f5f5f7] border border-zinc-200/70 rounded-[28px] sm:rounded-[32px] p-6 sm:p-7 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] transition-all duration-300"
+        >
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-4 divide-y md:divide-y-0 md:divide-x divide-zinc-200/80">
-            <div className="flex flex-col items-center justify-center text-center px-4 py-1">
-              <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900">
-                20+
-              </span>
-              <span className="text-xs sm:text-[13px] font-medium text-zinc-500 mt-1">
-                Completed Projects
-              </span>
-            </div>
+            {/* Metric 1: 20+ Completed Projects */}
+            <AnimatedMetric
+              value={20}
+              suffix="+"
+              label="Completed Projects"
+              isVisible={isMetricsVisible}
+              duration={1600}
+            />
 
-            <div className="flex flex-col items-center justify-center text-center px-4 py-1 pt-4 md:pt-1">
-              <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900">
-                99%
-              </span>
-              <span className="text-xs sm:text-[13px] font-medium text-zinc-500 mt-1">
-                Client Satisfaction
-              </span>
-            </div>
+            {/* Metric 2: 99% Client Satisfaction */}
+            <AnimatedMetric
+              value={99}
+              suffix="%"
+              label="Client Satisfaction"
+              isVisible={isMetricsVisible}
+              className="pt-4 md:pt-1"
+              duration={1900}
+            />
 
-            <div className="flex flex-col items-center justify-center text-center px-4 py-1 pt-4 md:pt-1">
-              <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900">
-                5x
-              </span>
-              <span className="text-xs sm:text-[13px] font-medium text-zinc-500 mt-1">
-                Average Web App Speedup
-              </span>
-            </div>
+            {/* Metric 3: 5x Average Web App Speedup */}
+            <AnimatedMetric
+              value={5}
+              suffix="x"
+              label="Average Web App Speedup"
+              isVisible={isMetricsVisible}
+              className="pt-4 md:pt-1"
+              duration={1400}
+            />
 
-            <div className="flex flex-col items-center justify-center text-center px-4 py-1 pt-4 md:pt-1">
-              <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900">
-                24/7
-              </span>
-              <span className="text-xs sm:text-[13px] font-medium text-zinc-500 mt-1">
-                Technical Support
-              </span>
-            </div>
+            {/* Metric 4: 24/7 Technical Support */}
+            <AnimatedMetric
+              value={24}
+              suffix="/7"
+              label="Technical Support"
+              isVisible={isMetricsVisible}
+              className="pt-4 md:pt-1"
+              duration={1700}
+            />
           </div>
         </div>
       </div>

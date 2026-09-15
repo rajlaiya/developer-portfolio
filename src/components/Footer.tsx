@@ -1,45 +1,105 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function Footer() {
+  const [logoSrc, setLogoSrc] = useState<string>("/assets/service_logo.png");
+
+  // Client-side canvas processor: removes the black background and auto-crops empty borders so the logo renders large and crisp
+  useEffect(() => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = "/assets/service_logo.png";
+    img.onload = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        ctx.drawImage(img, 0, 0);
+        const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const d = imgData.data;
+
+        let minX = canvas.width;
+        let minY = canvas.height;
+        let maxX = 0;
+        let maxY = 0;
+        let hasContent = false;
+
+        // Strip dark/black background pixels and detect tight bounding box of logo lettering
+        for (let y = 0; y < canvas.height; y++) {
+          for (let x = 0; x < canvas.width; x++) {
+            const idx = (y * canvas.width + x) * 4;
+            const r = d[idx];
+            const g = d[idx + 1];
+            const b = d[idx + 2];
+            const brightness = Math.max(r, g, b);
+
+            if (brightness < 35) {
+              d[idx + 3] = 0; // Completely transparent for dark background
+            } else {
+              hasContent = true;
+              if (x < minX) minX = x;
+              if (x > maxX) maxX = x;
+              if (y < minY) minY = y;
+              if (y > maxY) maxY = y;
+
+              if (brightness < 100) {
+                d[idx + 3] = Math.round(((brightness - 35) / 65) * 255); // Smooth anti-aliased edge
+              }
+            }
+          }
+        }
+
+        ctx.putImageData(imgData, 0, 0);
+
+        // Auto-crop to exact text boundaries so the logo fills the container without empty black margins
+        if (hasContent && maxX > minX && maxY > minY) {
+          const pad = 12;
+          const cropX = Math.max(0, minX - pad);
+          const cropY = Math.max(0, minY - pad);
+          const cropW = Math.min(canvas.width - cropX, maxX - minX + pad * 2);
+          const cropH = Math.min(canvas.height - cropY, maxY - minY + pad * 2);
+
+          const cropCanvas = document.createElement("canvas");
+          cropCanvas.width = cropW;
+          cropCanvas.height = cropH;
+          const cropCtx = cropCanvas.getContext("2d");
+          if (cropCtx) {
+            cropCtx.drawImage(canvas, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
+            setLogoSrc(cropCanvas.toDataURL("image/png"));
+            return;
+          }
+        }
+
+        setLogoSrc(canvas.toDataURL("image/png"));
+      } catch (err) {
+        console.error("Canvas transparent logo generation error:", err);
+      }
+    };
+  }, []);
+
   return (
-    <footer className="w-full bg-[#08080a] text-white py-14 sm:py-20 px-6 sm:px-12 border-t border-zinc-900">
-      <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-10">
+    <footer className="w-full bg-[#08080a] text-white py-12 sm:py-16 px-6 sm:px-12 border-t border-zinc-900">
+      <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8 sm:gap-10">
         
         {/* ========================================================= */}
-        {/* LEFT: Geometric Red Brand Logo & Name                     */}
+        {/* LEFT: Coding_With_RL Logo (Without Black Background)     */}
         {/* ========================================================= */}
-        <div className="flex items-center gap-4 group">
-          {/* Geometric Red Accent Emblem (matching ERVON style in reference) */}
-          <div className="relative w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center">
-            <svg
-              className="w-full h-full text-red-600 transition-transform duration-300 group-hover:scale-105"
-              viewBox="0 0 48 48"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {/* Dynamic curved angular polygon */}
-              <path
-                d="M8 8L38 18L32 40L14 36L8 8Z"
-                fill="#EF4444"
-              />
-              <path
-                d="M20 18C20 15.7909 21.7909 14 24 14C26.2091 14 28 15.7909 28 18C28 20.2091 26.2091 22 24 22C21.7909 22 20 20.2091 20 18Z"
-                fill="#08080A"
-              />
-            </svg>
-          </div>
-
-          {/* Brand Name */}
-          <div className="flex flex-col">
-            <span className="text-xl sm:text-2xl font-black tracking-[0.2em] uppercase text-white font-mono">
-              RAJ LAIYA
-            </span>
-            <span className="text-[10px] sm:text-[11px] tracking-widest text-zinc-500 uppercase font-medium">
-              Full-Stack Engineering & Web Architecture
-            </span>
-          </div>
-        </div>
+        <Link
+          href="/"
+          className="group inline-flex items-center transition-transform duration-300 hover:scale-[1.02]"
+        >
+          <img
+            src={logoSrc}
+            alt="Coding_With_RL - Creating the Web's Next Benchmark"
+            className="w-64 sm:w-80 lg:w-96 max-w-full h-auto object-contain select-none transition-all duration-300"
+            style={{ mixBlendMode: "screen" }}
+          />
+        </Link>
 
         {/* ========================================================= */}
         {/* RIGHT: Monospace Social Links, Phone & Copyright          */}
