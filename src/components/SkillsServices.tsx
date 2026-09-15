@@ -282,12 +282,12 @@ export default function SkillsServices() {
   return (
     <section
       id="skills"
-      className="relative w-full pt-8 sm:pt-12 pb-20 sm:pb-28 bg-white text-zinc-900 scroll-mt-20"
+      className="relative w-full pt-4 sm:pt-6 pb-14 sm:pb-20 bg-white text-zinc-900 scroll-mt-20"
     >
       <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Section Tagline */}
-        <div className="text-center mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-100 text-zinc-600 text-xs font-medium tracking-wide uppercase mb-3">
+        <div className="text-center mb-7 sm:mb-9">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-100 text-zinc-600 text-xs font-medium tracking-wide uppercase mb-2.5">
             Technical Stack & Expertise
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-zinc-900">
@@ -296,23 +296,23 @@ export default function SkillsServices() {
         </div>
 
         {/* 2-Column Bento Grid Matching Reference Image Aesthetic */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-start">
           
           {/* ========================================================= */}
           {/* CARD 1: SKILLS & TECHNOLOGIES (Custom Categories Style)   */}
           {/* ========================================================= */}
-          <div className="bg-[#f5f5f7] border border-zinc-200/70 rounded-[32px] p-7 sm:p-10 lg:p-11 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-shadow duration-300">
+          <div className="bg-[#f5f5f7] border border-zinc-200/70 rounded-[32px] p-6 sm:p-8 lg:p-9 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-shadow duration-300">
             <div>
               {/* Card Header */}
               <h3 className="text-2xl sm:text-[28px] font-bold tracking-tight text-zinc-900 text-center">
                 Custom Categories
               </h3>
-              <p className="text-sm sm:text-[14px] text-zinc-500 leading-relaxed text-center max-w-md mx-auto mt-2.5 mb-7">
+              <p className="text-sm sm:text-[14px] text-zinc-500 leading-relaxed text-center max-w-md mx-auto mt-2 mb-5">
                 Battle-tested frameworks, robust backend runtimes, and databases I use to architect scalable, high-converting web applications.
               </p>
 
               {/* Reference-Style Pill Badges */}
-              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-8">
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-5">
                 <button
                   type="button"
                   onClick={() => setActiveCategory("all")}
@@ -378,7 +378,7 @@ export default function SkillsServices() {
               </div>
 
               {/* Squircles / App Icon Tiles Grid (Interactive Hover & Details) */}
-              <div className="grid grid-cols-5 gap-3.5 sm:gap-4 max-w-md mx-auto mb-6">
+              <div className="grid grid-cols-5 gap-3.5 sm:gap-4 max-w-md mx-auto mb-4">
                 {filteredSkills.map((skill) => (
                   <div
                     key={skill.id}
@@ -398,7 +398,7 @@ export default function SkillsServices() {
             </div>
 
             {/* Interactive Tooltip Card at the Bottom of Left Card */}
-            <div className="mt-4 pt-4 border-t border-zinc-200/80 flex items-center justify-between min-h-[50px]">
+            <div className="mt-4 pt-3 border-t border-zinc-200/80 flex items-center justify-between min-h-[46px]">
               {hoveredSkill ? (
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center p-1">
@@ -428,24 +428,25 @@ export default function SkillsServices() {
           {/* ========================================================= */}
           {/* CARD 2: SERVICES & SOLUTIONS (Find by App or Type Style)   */}
           {/* ========================================================= */}
-          <div className="bg-[#f5f5f7] border border-zinc-200/70 rounded-[32px] p-7 sm:p-10 lg:p-11 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-shadow duration-300">
+          <div className="bg-[#f5f5f7] border border-zinc-200/70 rounded-[32px] p-6 sm:p-8 lg:p-9 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-shadow duration-300">
             <div>
               {/* Card Header */}
               <h3 className="text-2xl sm:text-[28px] font-bold tracking-tight text-zinc-900 text-center">
                 Find by App or Type
               </h3>
-              <p className="text-sm sm:text-[14px] text-zinc-500 leading-relaxed text-center max-w-md mx-auto mt-2.5 mb-7">
+              <p className="text-sm sm:text-[14px] text-zinc-500 leading-relaxed text-center max-w-md mx-auto mt-2 mb-5">
                 Comprehensive engineering capabilities tailored for businesses — from initial architecture to reviving legacy code and deep debugging.
               </p>
 
               {/* Row 1: Glossy Colorful Squircle App Tiles (Matching Reference Image) */}
-              <div className="flex justify-center items-center gap-3 sm:gap-4 mb-4">
+              <div className="flex justify-center items-center gap-3 sm:gap-4 mb-3">
                 {SERVICES.map((service) => {
                   const isSelected = activeServiceId === service.id;
                   return (
                     <button
                       key={service.id}
                       type="button"
+                      onMouseEnter={() => setActiveServiceId(service.id)}
                       onClick={() => setActiveServiceId(service.id)}
                       className={`group relative w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center cursor-pointer transition-all duration-300 shadow-md ${
                         isSelected
@@ -468,7 +469,7 @@ export default function SkillsServices() {
               </div>
 
               {/* Row 2: Monochrome Squircle Icon Row (matching reference image: @, link, user, code, menu) */}
-              <div className="flex justify-center items-center gap-3 sm:gap-4 mb-6">
+              <div className="flex justify-center items-center gap-3 sm:gap-4 mb-3">
                 <div
                   title="Direct Client Communication"
                   className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-zinc-200/80 text-zinc-600 flex items-center justify-center hover:bg-zinc-300 hover:text-zinc-900 transition-colors cursor-default"
@@ -512,7 +513,7 @@ export default function SkillsServices() {
               </div>
 
               {/* Service Active Detail Box */}
-              <div className="bg-white rounded-2xl p-5 sm:p-6 border border-zinc-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+              <div className="bg-white rounded-2xl p-4 sm:p-5 border border-zinc-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="text-base sm:text-lg font-bold text-zinc-900">
                     {selectedService.title}
@@ -522,7 +523,7 @@ export default function SkillsServices() {
                   </span>
                 </div>
 
-                <p className="text-xs sm:text-[13px] text-zinc-600 leading-relaxed mb-4">
+                <p className="text-xs sm:text-[13px] text-zinc-600 leading-relaxed mb-3">
                   {selectedService.description}
                 </p>
 
@@ -551,7 +552,7 @@ export default function SkillsServices() {
             </div>
 
             {/* Bottom Contact Toolbar */}
-            <div className="mt-5 pt-4 border-t border-zinc-200/80 flex items-center justify-between">
+            <div className="mt-3 pt-3 border-t border-zinc-200/80 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold text-zinc-700">
                   Ready to start a project?
@@ -569,6 +570,49 @@ export default function SkillsServices() {
             </div>
           </div>
 
+        </div>
+
+        {/* ========================================================= */}
+        {/* SEPARATE HORIZONTAL METRICS CONTAINER                      */}
+        {/* ========================================================= */}
+        <div className="mt-8 sm:mt-10 w-full bg-[#f5f5f7] border border-zinc-200/70 rounded-[28px] sm:rounded-[32px] p-6 sm:p-7 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] transition-shadow duration-300">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-4 divide-y md:divide-y-0 md:divide-x divide-zinc-200/80">
+            <div className="flex flex-col items-center justify-center text-center px-4 py-1">
+              <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900">
+                20+
+              </span>
+              <span className="text-xs sm:text-[13px] font-medium text-zinc-500 mt-1">
+                Completed Projects
+              </span>
+            </div>
+
+            <div className="flex flex-col items-center justify-center text-center px-4 py-1 pt-4 md:pt-1">
+              <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900">
+                99%
+              </span>
+              <span className="text-xs sm:text-[13px] font-medium text-zinc-500 mt-1">
+                Client Satisfaction
+              </span>
+            </div>
+
+            <div className="flex flex-col items-center justify-center text-center px-4 py-1 pt-4 md:pt-1">
+              <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900">
+                5x
+              </span>
+              <span className="text-xs sm:text-[13px] font-medium text-zinc-500 mt-1">
+                Average Web App Speedup
+              </span>
+            </div>
+
+            <div className="flex flex-col items-center justify-center text-center px-4 py-1 pt-4 md:pt-1">
+              <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900">
+                24/7
+              </span>
+              <span className="text-xs sm:text-[13px] font-medium text-zinc-500 mt-1">
+                Technical Support
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
