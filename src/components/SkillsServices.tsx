@@ -282,7 +282,7 @@ export default function SkillsServices() {
   return (
     <section
       id="skills"
-      className="relative w-full py-20 sm:py-28 bg-white text-zinc-900 scroll-mt-20"
+      className="relative w-full pt-8 sm:pt-12 pb-20 sm:pb-28 bg-white text-zinc-900 scroll-mt-20"
     >
       <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Section Tagline */}

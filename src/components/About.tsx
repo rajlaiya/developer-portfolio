@@ -63,12 +63,11 @@ export default function About() {
 
   const totalChars = bodyText.length;
 
-  // Animation timeline phases (matching Eco.com):
-  // 0.00 -> 0.08: Sticky enters & smooth fade in
-  // 0.08 -> 0.82: Active typing / character reveal
-  // 0.82 -> 1.00: Exit transition (subtle scale-up + smooth fade-out)
-  const revealStart = 0.08;
-  const revealEnd = 0.82;
+  // Animation timeline phases:
+  // 0.02 -> 0.88: Active typing / character reveal
+  // 0.88 -> 1.00: Full text display, cleanly transitioning directly to Skills
+  const revealStart = 0.02;
+  const revealEnd = 0.88;
 
   let revealProgress = 0;
   if (progress >= revealEnd) {
@@ -84,20 +83,20 @@ export default function About() {
   let sectionScale = 1;
   let sectionY = 0;
 
-  if (progress < 0.06) {
-    sectionOpacity = Math.max(0.2, progress / 0.06);
-  } else if (progress > 0.84) {
-    const exitProgress = (progress - 0.84) / 0.16; // 0 to 1
-    sectionOpacity = Math.max(0, 1 - exitProgress);
-    sectionScale = 1 + exitProgress * 0.04;
-    sectionY = -exitProgress * 30;
+  if (progress < 0.04) {
+    sectionOpacity = Math.max(0.4, progress / 0.04);
+  } else if (progress > 0.90) {
+    const exitProgress = (progress - 0.90) / 0.10; // 0 to 1
+    sectionOpacity = Math.max(0.3, 1 - exitProgress * 0.7);
+    sectionScale = 1 + exitProgress * 0.02;
+    sectionY = -exitProgress * 20;
   }
 
   return (
     <section
       id="about"
       ref={sectionRef}
-      className="relative w-full h-[260vh] bg-white text-zinc-900"
+      className="relative w-full h-[160vh] bg-white text-zinc-900"
     >
       {/* Sticky pinned viewport container */}
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center px-6 sm:px-10 lg:px-16 overflow-hidden">
