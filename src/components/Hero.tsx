@@ -40,14 +40,14 @@ export default function Hero() {
           {/* CENTER COLUMN: Hero Portrait (Full Head & Hair Visible)   */}
           {/* ========================================================= */}
           <div className="lg:col-span-4 z-10 flex justify-center items-end relative order-1 lg:order-2 h-[460px] sm:h-[540px] lg:h-[620px]">
-            <div className="relative w-full max-w-[360px] sm:max-w-[420px] lg:max-w-[460px] xl:max-w-[500px] h-full flex justify-center items-end">
+            <div className="group relative w-full max-w-[360px] sm:max-w-[420px] lg:max-w-[460px] xl:max-w-[500px] h-full flex justify-center items-end cursor-pointer">
               <Image
                 src="/assets/new_img.png"
                 alt="Raj Laiya - Full-stack Developer"
                 width={650}
                 height={900}
                 priority
-                className="w-full h-full object-contain object-bottom select-none pointer-events-none scale-[1.32] lg:scale-[1.38] origin-bottom translate-y-3"
+                className="w-full h-full object-contain object-bottom select-none pointer-events-none scale-[1.32] lg:scale-[1.38] group-hover:scale-[1.39] lg:group-hover:scale-[1.46] origin-bottom translate-y-3 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform"
                 style={{
                   maskImage: "linear-gradient(to bottom, black 72%, transparent 98%)",
                   WebkitMaskImage: "linear-gradient(to bottom, black 72%, transparent 98%)",

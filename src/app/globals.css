@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Quantico:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -10,6 +11,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-quantico: 'Quantico', sans-serif;
 }
 
 html {
@@ -26,4 +28,27 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@font-face {
+  font-family: 'Quantico';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/Quantico-Regular.ttf') format('truetype'),
+       url('https://fonts.gstatic.com/s/quantico/v19/rax-HiSdp9cPL3KIF4xs.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Quantico';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/Quantico-Bold.ttf') format('truetype'),
+       url('https://fonts.gstatic.com/s/quantico/v19/rax5HiSdp9cPL3KIF7TQARha.ttf') format('truetype');
+}
+
+.font-quantico,
+.font-quantico * {
+  font-family: 'Quantico', sans-serif !important;
 }

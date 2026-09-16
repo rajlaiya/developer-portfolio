@@ -96,8 +96,45 @@ export default function About() {
     <section
       id="about"
       ref={sectionRef}
-      className="relative w-full h-[160vh] bg-white text-zinc-900"
+      className="relative w-full h-[160vh] bg-white text-zinc-900 font-quantico"
+      style={{ fontFamily: "'Quantico', sans-serif" }}
     >
+      {/* React 19 hoisted Google Fonts stylesheet */}
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Quantico:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        precedence="default"
+      />
+
+      {/* Embedded style block guaranteeing Quantico overrides all styles in #about */}
+      <style>{`
+        @font-face {
+          font-family: 'Quantico';
+          font-style: normal;
+          font-weight: 400;
+          font-display: swap;
+          src: url('/fonts/Quantico-Regular.ttf') format('truetype'),
+               url('https://fonts.gstatic.com/s/quantico/v19/rax-HiSdp9cPL3KIF4xs.ttf') format('truetype');
+        }
+
+        @font-face {
+          font-family: 'Quantico';
+          font-style: normal;
+          font-weight: 700;
+          font-display: swap;
+          src: url('/fonts/Quantico-Bold.ttf') format('truetype'),
+               url('https://fonts.gstatic.com/s/quantico/v19/rax5HiSdp9cPL3KIF7TQARha.ttf') format('truetype');
+        }
+
+        #about,
+        #about h2,
+        #about p,
+        #about span,
+        #about div {
+          font-family: 'Quantico', sans-serif !important;
+        }
+      `}</style>
+
       {/* Sticky pinned viewport container */}
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center px-6 sm:px-10 lg:px-16 overflow-hidden">
         <div
@@ -105,15 +142,22 @@ export default function About() {
           style={{
             opacity: sectionOpacity,
             transform: `scale(${sectionScale}) translateY(${sectionY}px)`,
+            fontFamily: "'Quantico', sans-serif",
           }}
         >
           {/* Top Intro Hook (Eco.com exact text size & proportion) */}
-          <h2 className="text-2xl sm:text-3xl lg:text-[38px] xl:text-[42px] font-normal tracking-[-0.025em] leading-[1.22] text-zinc-900 max-w-3xl xl:max-w-4xl mx-auto mb-6 sm:mb-10 lg:mb-12">
+          <h2
+            className="text-2xl sm:text-3xl lg:text-[38px] xl:text-[42px] font-normal tracking-normal leading-[1.28] text-zinc-900 max-w-3xl xl:max-w-4xl mx-auto mb-6 sm:mb-10 lg:mb-12"
+            style={{ fontFamily: "'Quantico', sans-serif" }}
+          >
             {topHeading}
           </h2>
 
           {/* Scrolling Character-by-Character Typing Reveal */}
-          <p className="text-xl sm:text-2xl lg:text-[34px] xl:text-[38px] font-normal tracking-[-0.02em] leading-[1.3] text-center max-w-4xl xl:max-w-5xl mx-auto">
+          <p
+            className="text-xl sm:text-2xl lg:text-[34px] xl:text-[38px] font-normal tracking-normal leading-[1.38] text-center max-w-4xl xl:max-w-5xl mx-auto"
+            style={{ fontFamily: "'Quantico', sans-serif" }}
+          >
             {words.map((item, wIndex) => {
               return (
                 <span
