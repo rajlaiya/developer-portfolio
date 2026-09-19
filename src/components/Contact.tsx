@@ -62,31 +62,9 @@ export default function Contact() {
               <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-bold tracking-tight text-zinc-900 leading-[1.15] mb-4">
                 Have a Project in Mind?
               </h2>
-              <p className="text-sm sm:text-base text-zinc-600 leading-relaxed max-w-md mb-10">
+              <p className="text-sm sm:text-base text-zinc-600 leading-relaxed max-w-md mb-8">
                 We provide the high-performance engineering required to move your product from a roadmap to reality. I’m always open to collaborations and creative challenges.
               </p>
-
-              {/* Trusted By Section */}
-              <div className="mb-10">
-                <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-4">
-                  Trusted By Founders & Teams
-                </span>
-                <div className="grid grid-cols-4 gap-3 sm:gap-4 opacity-70">
-                  {/* Subtle Monochrome Tech & Client Logos */}
-                  <div className="h-11 rounded-lg bg-zinc-50 border border-zinc-200/60 flex items-center justify-center p-2">
-                    <span className="text-xs font-bold tracking-wider text-zinc-700">NEXT.JS</span>
-                  </div>
-                  <div className="h-11 rounded-lg bg-zinc-50 border border-zinc-200/60 flex items-center justify-center p-2">
-                    <span className="text-xs font-bold tracking-wider text-zinc-700">VERCEL</span>
-                  </div>
-                  <div className="h-11 rounded-lg bg-zinc-50 border border-zinc-200/60 flex items-center justify-center p-2">
-                    <span className="text-xs font-bold tracking-wider text-zinc-700">STRIPE</span>
-                  </div>
-                  <div className="h-11 rounded-lg bg-zinc-50 border border-zinc-200/60 flex items-center justify-center p-2">
-                    <span className="text-xs font-bold tracking-wider text-zinc-700">SUPABASE</span>
-                  </div>
-                </div>
-              </div>
 
               {/* Proof Rating */}
               <div className="flex items-center gap-3 pt-2">

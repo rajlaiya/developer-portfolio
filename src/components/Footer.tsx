@@ -263,18 +263,18 @@ export default function Footer() {
               {/* COL 3: Grid cell spacer */}
               <div className="hidden lg:block h-[54px] lg:border-r border-zinc-800" />
 
-              {/* COL 4: CREATED BY */}
-              <div className="flex items-center h-[54px] px-6 sm:px-8 gap-2.5 font-mono text-xs tracking-wider text-zinc-500 uppercase">
-                <span>CREATED BY</span>
+              {/* COL 4: DESIGN AND DEVELOP BY */}
+              <div className="flex items-center h-[54px] px-6 sm:px-8 gap-2 font-mono text-[11px] sm:text-xs tracking-wider text-zinc-500 uppercase whitespace-nowrap overflow-hidden">
+                <span>DESIGN AND DEVELOP BY</span>
                 <div className="w-5 h-5 rounded-full overflow-hidden border border-zinc-700 bg-zinc-800 shrink-0 inline-flex items-center justify-center">
                   <img
                     src="/assets/new_img.png"
-                    alt="Raj Laiya"
+                    alt="Coding_with_rl"
                     className="w-full h-full object-cover object-top"
                   />
                 </div>
-                <span className="text-zinc-200 font-semibold hover:text-white transition-colors">
-                  RAJ LAIYA
+                <span className="text-zinc-200 font-semibold hover:text-white transition-colors normal-case">
+                  Coding_with_rl
                 </span>
               </div>
 
@@ -300,13 +300,51 @@ export default function Footer() {
             </div>
 
             {/* ======================================================= */}
-            {/* GIGANTIC BRANDING: "CODE WITH RL"                       */}
+            {/* GIGANTIC BRANDING: "CODE WITH RL" WITH HOVER ANIMATION  */}
             {/* ======================================================= */}
-            <div className="w-full overflow-hidden py-6 sm:py-8 md:py-12 lg:py-14 px-2 sm:px-4 flex items-center justify-center select-none bg-black">
-              <h2 className="text-[12.8vw] font-black tracking-tighter text-white uppercase leading-[0.8] text-center whitespace-nowrap drop-shadow-sm select-none pointer-events-none font-sans">
-                CODE WITH RL
+            <Link
+              href="#home"
+              className="group relative w-full overflow-hidden py-6 sm:py-8 md:py-12 lg:py-14 px-2 sm:px-4 flex flex-col items-center justify-center select-none bg-black cursor-pointer focus:outline-none"
+              aria-label="Back to top"
+            >
+              {/* Ambient radial glow bloom on hover */}
+              <div
+                className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none blur-3xl bg-[radial-gradient(circle,rgba(59,130,246,0.25)_0%,rgba(147,51,234,0.15)_50%,transparent_75%)]"
+                aria-hidden="true"
+              />
+
+              {/* Floating 'BACK TO TOP ↑' pill badge on hover */}
+              <div
+                className="absolute top-2 sm:top-4 px-3 py-1 rounded-full bg-zinc-900/90 border border-zinc-700/80 text-[10px] sm:text-xs font-mono tracking-widest text-zinc-300 opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 pointer-events-none shadow-xl z-20 flex items-center gap-1.5"
+                aria-hidden="true"
+              >
+                <span>BACK TO TOP</span>
+                <span className="text-zinc-400 group-hover:-translate-y-0.5 transition-transform duration-200">
+                  ↑
+                </span>
+              </div>
+
+              {/* Interactive kinetic typography */}
+              <h2 className="relative text-[12.8vw] font-black tracking-tighter uppercase leading-[0.8] text-center whitespace-nowrap drop-shadow-sm font-sans flex items-center justify-center z-10">
+                {"CODE WITH RL".split("").map((char, index) => {
+                  if (char === " ") {
+                    return (
+                      <span key={index} className="inline-block w-[0.25em]">
+                        &nbsp;
+                      </span>
+                    );
+                  }
+                  return (
+                    <span
+                      key={index}
+                      className="inline-block text-white transition-all duration-200 ease-out group-hover:text-zinc-400 hover:!text-white hover:-translate-y-2 sm:hover:-translate-y-3.5 hover:scale-108 hover:drop-shadow-[0_0_35px_rgba(255,255,255,0.85)] will-change-transform"
+                    >
+                      {char}
+                    </span>
+                  );
+                })}
               </h2>
-            </div>
+            </Link>
 
             {/* Bottom corner crosshairs */}
             <div className="border-t border-zinc-800 relative w-full h-0 pointer-events-none select-none">

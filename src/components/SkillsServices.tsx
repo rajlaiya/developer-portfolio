@@ -127,6 +127,83 @@ export default function SkillsServices() {
     };
   }, []);
 
+  // Scrolling-based in & out animation for Left Part and Right Part
+  const sectionRef = useRef<HTMLElement>(null);
+  const [scrollState, setScrollState] = useState({
+    leftTranslateX: 0,
+    rightTranslateX: 0,
+    opacity: 1,
+  });
+
+  useEffect(() => {
+    let animFrame: number;
+
+    const handleScroll = () => {
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const windowH = window.innerHeight;
+
+      // Distance to slide in/out (responsive)
+      const maxDistance = window.innerWidth < 768 ? 90 : 160;
+
+      // Entrance thresholds:
+      // Starts entering as soon as section top hits window bottom (rect.top <= windowH)
+      // Fully settled when rect.top <= windowH * 0.40
+      const enterStart = windowH;
+      const enterEnd = windowH * 0.4;
+
+      // Exit thresholds:
+      // Starts exiting when section bottom passes windowH * 0.55
+      // Fully exited when section bottom scrolls past top of viewport (rect.bottom <= 0)
+      const exitStart = windowH * 0.55;
+      const exitEnd = 0;
+
+      let progress = 1;
+
+      if (rect.top > enterStart) {
+        // Below viewport
+        progress = 0;
+      } else if (rect.top > enterEnd) {
+        // Entering from bottom: progress goes 0 -> 1
+        progress = (enterStart - rect.top) / (enterStart - enterEnd);
+      } else if (rect.bottom < exitEnd) {
+        // Scrolled completely past top of viewport
+        progress = 0;
+      } else if (rect.bottom < exitStart) {
+        // Exiting past top: progress goes 1 -> 0
+        progress = (rect.bottom - exitEnd) / (exitStart - exitEnd);
+      } else {
+        // Fully in reading view
+        progress = 1;
+      }
+
+      const clamped = Math.max(0, Math.min(1, progress));
+      const offset = (1 - clamped) * maxDistance;
+      const opacity = Math.max(0, Math.min(1, clamped * 1.25));
+
+      setScrollState({
+        leftTranslateX: -offset,
+        rightTranslateX: offset,
+        opacity,
+      });
+    };
+
+    const onScroll = () => {
+      cancelAnimationFrame(animFrame);
+      animFrame = requestAnimationFrame(handleScroll);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(animFrame);
+    };
+  }, []);
+
   const SKILLS: SkillItem[] = [
     {
       id: "nextjs",
@@ -383,7 +460,8 @@ export default function SkillsServices() {
   return (
     <section
       id="skills"
-      className="relative w-full pt-4 sm:pt-6 pb-14 sm:pb-20 bg-white text-zinc-900 scroll-mt-20"
+      ref={sectionRef}
+      className="relative w-full pt-4 sm:pt-6 pb-14 sm:pb-20 bg-white text-zinc-900 scroll-mt-20 overflow-x-hidden"
     >
       <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Section Tagline */}
@@ -402,7 +480,13 @@ export default function SkillsServices() {
           {/* ========================================================= */}
           {/* CARD 1: SKILLS & TECHNOLOGIES (Custom Categories Style)   */}
           {/* ========================================================= */}
-          <div className="bg-[#f5f5f7] border border-zinc-200/70 rounded-[32px] p-6 sm:p-8 lg:p-9 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-shadow duration-300">
+          <div
+            style={{
+              transform: `translateX(${scrollState.leftTranslateX}px)`,
+              opacity: scrollState.opacity,
+            }}
+            className="bg-[#f5f5f7] border border-zinc-200/70 rounded-[32px] p-6 sm:p-8 lg:p-9 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-[transform,opacity,box-shadow] duration-300 ease-out will-change-transform"
+          >
             <div>
               {/* Card Header */}
               <h3 className="text-2xl sm:text-[28px] font-bold tracking-tight text-zinc-900 text-center">
@@ -529,7 +613,13 @@ export default function SkillsServices() {
           {/* ========================================================= */}
           {/* CARD 2: SERVICES & SOLUTIONS (Find by App or Type Style)   */}
           {/* ========================================================= */}
-          <div className="bg-[#f5f5f7] border border-zinc-200/70 rounded-[32px] p-6 sm:p-8 lg:p-9 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-shadow duration-300">
+          <div
+            style={{
+              transform: `translateX(${scrollState.rightTranslateX}px)`,
+              opacity: scrollState.opacity,
+            }}
+            className="bg-[#f5f5f7] border border-zinc-200/70 rounded-[32px] p-6 sm:p-8 lg:p-9 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-[transform,opacity,box-shadow] duration-300 ease-out will-change-transform"
+          >
             <div>
               {/* Card Header */}
               <h3 className="text-2xl sm:text-[28px] font-bold tracking-tight text-zinc-900 text-center">

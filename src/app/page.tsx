@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import SkillsServices from "@/components/SkillsServices";
+import Projects from "@/components/Projects";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
@@ -22,10 +23,8 @@ export default function Home() {
         {/* Unified Skills, Technologies & Services Section */}
         <SkillsServices />
 
-        {/* Projects Section */}
-        <div className="w-full max-w-5xl mx-auto px-6">
-          <section id="projects" className="min-h-[50vh] flex flex-col justify-center" />
-        </div>
+        {/* Projects Section - Borderless Showcase with Hover Scaling & Side Nav */}
+        <Projects />
 
         {/* Contact Section */}
         <Contact />
