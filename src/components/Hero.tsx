@@ -1,11 +1,74 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [scrollState, setScrollState] = useState({
+    leftTranslateX: 0,
+    rightTranslateX: 0,
+    opacity: 1,
+  });
+
+  useEffect(() => {
+    let animFrame: number;
+
+    const handleScroll = () => {
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const heroHeight = rect.height || window.innerHeight;
+
+      // Distance to slide in/out (responsive: 90px on mobile, 160px on desktop)
+      const maxDistance = window.innerWidth < 768 ? 90 : 160;
+
+      // When scrolled to the top (rect.top >= 0), it's 100% in view (progress = 1)
+      // As user scrolls down (rect.top < 0), progress smoothly drops from 1 -> 0
+      // Fully slides out when user has scrolled past 65% of the hero height
+      const exitDistance = heroHeight * 0.65;
+      const scrollYOffset = Math.max(0, -rect.top);
+
+      let progress = 1;
+      if (scrollYOffset <= 0) {
+        progress = 1;
+      } else if (scrollYOffset >= exitDistance) {
+        progress = 0;
+      } else {
+        progress = 1 - scrollYOffset / exitDistance;
+      }
+
+      const clamped = Math.max(0, Math.min(1, progress));
+      const offset = (1 - clamped) * maxDistance;
+      const opacity = Math.max(0, Math.min(1, clamped * 1.2));
+
+      setScrollState({
+        leftTranslateX: -offset,
+        rightTranslateX: offset,
+        opacity,
+      });
+    };
+
+    const onScroll = () => {
+      cancelAnimationFrame(animFrame);
+      animFrame = requestAnimationFrame(handleScroll);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(animFrame);
+    };
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="home"
-      className="relative w-full min-h-[calc(100vh-5rem)] flex flex-col justify-center items-center pt-8 pb-12 lg:pt-0 lg:pb-8 overflow-hidden"
+      className="relative w-full min-h-[calc(100vh-5rem)] flex flex-col justify-center items-center pt-8 pb-12 lg:pt-0 lg:pb-8 overflow-x-hidden"
     >
       <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-end relative min-h-[520px] lg:min-h-[620px]">
@@ -13,7 +76,13 @@ export default function Hero() {
           {/* ========================================================= */}
           {/* LEFT COLUMN: Badge, Name, Title, and Subtitle              */}
           {/* ========================================================= */}
-          <div className="lg:col-span-4 z-20 flex flex-col justify-end pb-4 lg:pb-12 text-left order-2 lg:order-1">
+          <div
+            style={{
+              transform: `translateX(${scrollState.leftTranslateX}px)`,
+              opacity: scrollState.opacity,
+            }}
+            className="lg:col-span-4 z-20 flex flex-col justify-end pb-4 lg:pb-12 text-left order-2 lg:order-1 transition-[transform,opacity] duration-150 ease-out will-change-transform"
+          >
             {/* Status / Availability Badge */}
             <div className="inline-flex items-center gap-2 mb-4">
               <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
@@ -61,7 +130,13 @@ export default function Hero() {
           {/* ========================================================= */}
           {/* RIGHT COLUMN: Lead-Generation Pitch & CTA Button           */}
           {/* ========================================================= */}
-          <div className="lg:col-span-4 z-20 flex flex-col justify-end pb-4 lg:pb-12 text-left order-3">
+          <div
+            style={{
+              transform: `translateX(${scrollState.rightTranslateX}px)`,
+              opacity: scrollState.opacity,
+            }}
+            className="lg:col-span-4 z-20 flex flex-col justify-end pb-4 lg:pb-12 text-left order-3 transition-[transform,opacity] duration-150 ease-out will-change-transform"
+          >
             {/* Impact Statement / Lead Generation Paragraph */}
             <p className="text-xs sm:text-[13px] lg:text-[14px] text-zinc-600 leading-[1.65] max-w-xs sm:max-w-sm mb-5">
               As a full-stack engineer, I partner with ambitious founders and teams to architect fast, resilient web applications that convert. From scalable architecture to intuitive UI, turning ideas into reliable products that drive revenue.
