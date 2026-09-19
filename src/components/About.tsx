@@ -7,67 +7,54 @@ export default function About() {
   const [progress, setProgress] = useState<number>(0);
 
   useEffect(() => {
-    let ticking = false;
+    let animationFrameId: number;
 
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          if (!sectionRef.current) {
-            ticking = false;
-            return;
-          }
-          const rect = sectionRef.current.getBoundingClientRect();
-          const windowHeight = window.innerHeight;
-          const totalScrollable = rect.height - windowHeight;
+    const updateScrollProgress = () => {
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const totalScrollable = rect.height - windowHeight;
 
-          if (totalScrollable > 0) {
-            const currentScroll = -rect.top;
-            const rawProgress = currentScroll / totalScrollable;
-            const clamped = Math.max(0, Math.min(1, rawProgress));
-            setProgress(clamped);
-          }
-          ticking = false;
-        });
-        ticking = true;
+      if (totalScrollable > 0) {
+        const currentScroll = -rect.top;
+        const rawProgress = currentScroll / totalScrollable;
+        const clamped = Math.max(0, Math.min(1, rawProgress));
+        setProgress(clamped);
       }
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
+    const handleScroll = () => {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = requestAnimationFrame(updateScrollProgress);
+    };
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll, { passive: true });
+    updateScrollProgress();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+      cancelAnimationFrame(animationFrameId);
+    };
   }, []);
 
-  // Eco.com style content structured professionally
+  // Exact portfolio text - untouched
   const topHeading =
     "MERN Stack Developer with 2.5+ years of experience building actual production web applications.";
 
   const bodyText =
     "I love creating seamless user experiences and robust backend systems. My goal is to deliver high-quality, maintainable code and collaborate with ambitious teams to bring ideas to life with speed and precision.";
 
-  // Words breakdown for word-wrapping safety with global character indexing
-  const words = useMemo(() => {
-    const rawWords = bodyText.split(" ");
-    let charOffset = 0;
-    return rawWords.map((word) => {
-      const startIndex = charOffset;
-      const length = word.length;
-      charOffset += length + 1; // +1 for the space
-      return {
-        word,
-        startIndex,
-        length,
-      };
-    });
-  }, [bodyText]);
+  const headingWords = useMemo(() => topHeading.split(" "), [topHeading]);
+  const bodyWords = useMemo(() => bodyText.split(" "), [bodyText]);
+  const totalWords = headingWords.length + bodyWords.length; // 13 + 32 = 45 words
 
-  const totalChars = bodyText.length;
-
-  // Animation timeline phases:
-  // 0.02 -> 0.88: Active typing / character reveal
-  // 0.88 -> 1.00: Full text display, cleanly transitioning directly to Skills
-  const revealStart = 0.02;
-  const revealEnd = 0.88;
+  // Animation timeline over generous scroll distance (h-[320vh]):
+  // 0.04 -> 0.85: Slow, smooth word-by-word reveal as user scrolls through pinned section
+  // 0.85 -> 1.00: Full text stays 100% illuminated in place for clear reading before scrolling to next section
+  const revealStart = 0.04;
+  const revealEnd = 0.85;
 
   let revealProgress = 0;
   if (progress >= revealEnd) {
@@ -76,27 +63,58 @@ export default function About() {
     revealProgress = (progress - revealStart) / (revealEnd - revealStart);
   }
 
-  const currentCharFloat = revealProgress * totalChars;
+  const activeWordFloat = revealProgress * totalWords;
 
-  // Container exit & entrance transforms
-  let sectionOpacity = 1;
-  let sectionScale = 1;
-  let sectionY = 0;
+  // Render an individual word with smooth scroll illumination
+  const renderWord = (word: string, globalIndex: number) => {
+    // Word is already revealed
+    if (globalIndex < Math.floor(activeWordFloat)) {
+      return (
+        <span
+          key={globalIndex}
+          className="inline-block whitespace-nowrap mr-[0.28em] text-zinc-950 font-normal transition-colors duration-150"
+        >
+          {word}
+        </span>
+      );
+    }
 
-  if (progress < 0.04) {
-    sectionOpacity = Math.max(0.4, progress / 0.04);
-  } else if (progress > 0.90) {
-    const exitProgress = (progress - 0.90) / 0.10; // 0 to 1
-    sectionOpacity = Math.max(0.3, 1 - exitProgress * 0.7);
-    sectionScale = 1 + exitProgress * 0.02;
-    sectionY = -exitProgress * 20;
-  }
+    // Word is currently being revealed (smooth opacity transition)
+    if (globalIndex === Math.floor(activeWordFloat)) {
+      const partial = activeWordFloat - globalIndex;
+      const opacity = 0.18 + 0.82 * partial;
+      return (
+        <span
+          key={globalIndex}
+          className="inline-block whitespace-nowrap mr-[0.28em] font-normal transition-colors duration-75"
+          style={{
+            color: `rgba(9, 9, 11, ${opacity})`,
+          }}
+        >
+          {word}
+        </span>
+      );
+    }
+
+    // Word is unrevealed (faint watermark preview)
+    return (
+      <span
+        key={globalIndex}
+        className="inline-block whitespace-nowrap mr-[0.28em] font-normal transition-colors duration-150"
+        style={{
+          color: "rgba(9, 9, 11, 0.18)",
+        }}
+      >
+        {word}
+      </span>
+    );
+  };
 
   return (
     <section
       id="about"
       ref={sectionRef}
-      className="relative w-full h-[160vh] bg-white text-zinc-900 font-quantico"
+      className="relative w-full h-[320vh] bg-white text-zinc-900 font-quantico"
       style={{ fontFamily: "'Quantico', sans-serif" }}
     >
       {/* React 19 hoisted Google Fonts stylesheet */}
@@ -135,77 +153,30 @@ export default function About() {
         }
       `}</style>
 
-      {/* Sticky pinned viewport container */}
+      {/* Sticky pinned viewport container: holds position firmly while scrolling */}
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center px-6 sm:px-10 lg:px-16 overflow-hidden">
         <div
-          className="w-full max-w-4xl xl:max-w-5xl mx-auto flex flex-col items-center justify-center text-center transition-transform duration-75 ease-out select-none"
+          className="w-full max-w-4xl xl:max-w-5xl mx-auto flex flex-col items-center justify-center text-center select-none"
           style={{
-            opacity: sectionOpacity,
-            transform: `scale(${sectionScale}) translateY(${sectionY}px)`,
             fontFamily: "'Quantico', sans-serif",
           }}
         >
-          {/* Top Intro Hook (Eco.com exact text size & proportion) */}
+          {/* Top Intro Hook */}
           <h2
-            className="text-2xl sm:text-3xl lg:text-[38px] xl:text-[42px] font-normal tracking-normal leading-[1.28] text-zinc-900 max-w-3xl xl:max-w-4xl mx-auto mb-6 sm:mb-10 lg:mb-12"
+            className="text-2xl sm:text-3xl lg:text-[38px] xl:text-[42px] font-normal tracking-normal leading-[1.28] text-center max-w-3xl xl:max-w-4xl mx-auto mb-6 sm:mb-10 lg:mb-12"
             style={{ fontFamily: "'Quantico', sans-serif" }}
           >
-            {topHeading}
+            {headingWords.map((word, index) => renderWord(word, index))}
           </h2>
 
-          {/* Scrolling Character-by-Character Typing Reveal */}
+          {/* Scrolling Word-by-Word Reveal */}
           <p
             className="text-xl sm:text-2xl lg:text-[34px] xl:text-[38px] font-normal tracking-normal leading-[1.38] text-center max-w-4xl xl:max-w-5xl mx-auto"
             style={{ fontFamily: "'Quantico', sans-serif" }}
           >
-            {words.map((item, wIndex) => {
-              return (
-                <span
-                  key={wIndex}
-                  className="inline-block whitespace-nowrap mr-[0.28em]"
-                >
-                  {item.word.split("").map((char, cIndex) => {
-                    const globalIndex = item.startIndex + cIndex;
-                    // Fully revealed
-                    if (globalIndex < Math.floor(currentCharFloat)) {
-                      return (
-                        <span
-                          key={cIndex}
-                          className="text-zinc-950 font-normal transition-colors duration-100"
-                        >
-                          {char}
-                        </span>
-                      );
-                    }
-                    // Character currently transitioning (subtle opacity blend)
-                    if (globalIndex === Math.floor(currentCharFloat)) {
-                      const partialAlpha = currentCharFloat - globalIndex;
-                      const opacity = 0.15 + 0.85 * partialAlpha;
-                      return (
-                        <span
-                          key={cIndex}
-                          style={{
-                            color: `rgba(9, 9, 11, ${opacity})`,
-                          }}
-                          className="font-normal"
-                        >
-                          {char}
-                        </span>
-                      );
-                    }
-                    // Unrevealed character: faint watermark preview like Eco.com
-                    return (
-                      <span
-                        key={cIndex}
-                        className="text-zinc-300 font-normal transition-colors duration-100"
-                      >
-                        {char}
-                      </span>
-                    );
-                  })}
-                </span>
-              );
-            })}
+            {bodyWords.map((word, index) =>
+              renderWord(word, headingWords.length + index)
+            )}
           </p>
         </div>
       </div>

@@ -9,6 +9,7 @@ export default function Contact() {
     phone: "",
     email: "",
     service: "",
+    budget: "",
     message: "",
   });
 
@@ -39,6 +40,7 @@ export default function Contact() {
         phone: "",
         email: "",
         service: "",
+        budget: "",
         message: "",
       });
     }, 4000);
@@ -58,10 +60,10 @@ export default function Contact() {
           <div className="lg:col-span-5 flex flex-col justify-between h-full">
             <div>
               <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-bold tracking-tight text-zinc-900 leading-[1.15] mb-4">
-                Ready to Build for Scale?
+                Have a Project in Mind?
               </h2>
               <p className="text-sm sm:text-base text-zinc-600 leading-relaxed max-w-md mb-10">
-                We provide the high-performance engineering required to move your product from a roadmap to reality.
+                We provide the high-performance engineering required to move your product from a roadmap to reality. I’m always open to collaborations and creative challenges.
               </p>
 
               {/* Trusted By Section */}
@@ -233,7 +235,26 @@ export default function Contact() {
                   </div>
                 </div>
 
-                {/* Row 3: Additional Project Details (250 chars max) */}
+                {/* Row 3: Budget Field */}
+                <div className="p-4 sm:p-5">
+                  <label
+                    htmlFor="budget"
+                    className="block text-xs font-medium text-zinc-700 mb-1.5"
+                  >
+                    * Project Budget
+                  </label>
+                  <input
+                    id="budget"
+                    name="budget"
+                    type="text"
+                    value={formData.budget}
+                    onChange={handleChange}
+                    placeholder="$2000 - $5000"
+                    className="w-full bg-transparent text-sm text-zinc-900 placeholder:text-zinc-400 font-medium focus:outline-none"
+                  />
+                </div>
+
+                {/* Row 4: Additional Project Details (250 chars max) */}
                 <div className="p-4 sm:p-5">
                   <label
                     htmlFor="message"
