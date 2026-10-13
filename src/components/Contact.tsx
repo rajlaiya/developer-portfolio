@@ -59,7 +59,7 @@ export default function Contact() {
           {/* ========================================================= */}
           <div className="lg:col-span-5 flex flex-col justify-between h-full">
             <div>
-              <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-bold tracking-tight text-zinc-900 leading-[1.15] mb-4">
+              <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-bold tracking-tight text-zinc-900 leading-[1.15] mb-4">
                 Have a Project in Mind?
               </h2>
               <p className="text-sm sm:text-base text-zinc-600 leading-relaxed max-w-md mb-8">
@@ -74,7 +74,7 @@ export default function Contact() {
                 <div className="flex items-center text-amber-400 text-sm gap-0.5">
                   {"★".repeat(5)}
                 </div>
-                <span className="text-xs sm:text-[13px] font-medium text-zinc-500 border-l border-zinc-200 pl-3">
+                <span className="text-xs sm:text-[0.8125rem] font-medium text-zinc-500 border-l border-zinc-200 pl-3">
                   20+ projects delivered
                 </span>
               </div>
@@ -251,7 +251,7 @@ export default function Contact() {
                     className="w-full bg-transparent text-sm text-zinc-900 placeholder:text-zinc-400 font-medium resize-none focus:outline-none"
                   />
                   {/* Live Character Counter */}
-                  <div className="flex justify-between items-center text-[11px] text-zinc-500 pt-2 border-t border-zinc-200/60 mt-2">
+                  <div className="flex justify-between items-center text-[0.6875rem] text-zinc-500 pt-2 border-t border-zinc-200/60 mt-2">
                     <span>
                       {formData.message.length} of {maxChars} max characters
                     </span>

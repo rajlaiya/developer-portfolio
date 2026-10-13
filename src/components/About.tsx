@@ -163,7 +163,7 @@ export default function About() {
         >
           {/* Top Intro Hook */}
           <h2
-            className="text-2xl sm:text-3xl lg:text-[38px] xl:text-[42px] font-normal tracking-normal leading-[1.28] text-center max-w-3xl xl:max-w-4xl mx-auto mb-6 sm:mb-10 lg:mb-12"
+            className="text-2xl sm:text-3xl lg:text-[2.375rem] xl:text-[2.625rem] font-normal tracking-normal leading-[1.28] text-center max-w-3xl xl:max-w-4xl mx-auto mb-6 sm:mb-10 lg:mb-12"
             style={{ fontFamily: "'Quantico', sans-serif" }}
           >
             {headingWords.map((word, index) => renderWord(word, index))}
@@ -171,7 +171,7 @@ export default function About() {
 
           {/* Scrolling Word-by-Word Reveal */}
           <p
-            className="text-xl sm:text-2xl lg:text-[34px] xl:text-[38px] font-normal tracking-normal leading-[1.38] text-center max-w-4xl xl:max-w-5xl mx-auto"
+            className="text-xl sm:text-2xl lg:text-[2.125rem] xl:text-[2.375rem] font-normal tracking-normal leading-[1.38] text-center max-w-4xl xl:max-w-5xl mx-auto"
             style={{ fontFamily: "'Quantico', sans-serif" }}
           >
             {bodyWords.map((word, index) =>

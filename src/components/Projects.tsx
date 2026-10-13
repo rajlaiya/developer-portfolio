@@ -138,57 +138,141 @@ export default function Projects() {
       id="projects"
       className="relative w-full py-20 sm:py-28 bg-white text-zinc-900 scroll-mt-20 overflow-hidden"
     >
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Section Header - Completely Unboxed & Minimalist */}
-        <div className="text-center mb-8 sm:mb-12">
+        <div className="text-center mb-10 sm:mb-14">
           <span className="text-xs font-semibold text-zinc-400 uppercase tracking-widest block mb-2.5">
             Featured Works
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-zinc-900">
-            Selected Projects
+            Selected Projects and products
           </h2>
         </div>
 
         {/* ============================================================ */}
-        {/* MAIN STAGE: Borderless Showcase with Hover Scaling Animation */}
-        {/* Movable Redirect Circle Blur Button on Image Hover           */}
-        {/* Both-side Buttons & Single Image at a time                    */}
-        {/* NO BOX-TYPE STYLE                                            */}
+        {/* SPLIT LAYOUT: Image showcase left, project details right     */}
+        {/* (stacks image -> details on mobile)                          */}
         {/* ============================================================ */}
-        <div
-          className="relative w-full max-w-5xl mx-auto"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
-          {/* IMAGE STAGE: Fixed Aspect Ratio, Smooth Crossfade, Hover Scale */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          {/* ========================================================== */}
+          {/* LEFT: Borderless Image Stage with Hover Scale & Cursor Pill */}
+          {/* ========================================================== */}
           <div
-            ref={stageRef}
-            onMouseMove={handleMouseMove}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={() => setIsHovered(false)}
-            className="relative w-full aspect-[16/11] sm:aspect-[16/10] max-h-[580px] flex items-center justify-center px-4 sm:px-10 cursor-none select-none"
+            className="lg:col-span-7"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
-            {/* MOVABLE REDIRECT CIRCLE BLUR BUTTON (Follows Cursor) */}
             <div
-              ref={cursorRef}
-              className="absolute top-0 left-0 pointer-events-none z-30 will-change-transform"
-              style={{
-                transform: "translate3d(-200px, -200px, 0)",
-              }}
+              ref={stageRef}
+              onMouseMove={handleMouseMove}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={() => setIsHovered(false)}
+              className="relative w-full aspect-[3/2] cursor-none select-none"
             >
+              {/* MOVABLE REDIRECT CIRCLE BLUR BUTTON (Follows Cursor) */}
               <div
-                className={`w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-black/75 backdrop-blur-xl border border-white/30 text-white shadow-[0_16px_40px_rgba(0,0,0,0.35)] flex flex-col items-center justify-center text-center p-2 transition-all duration-300 ease-out select-none ${
-                  isHovered ? "scale-100 opacity-100" : "scale-0 opacity-0"
-                }`}
+                ref={cursorRef}
+                className="absolute top-0 left-0 pointer-events-none z-30 will-change-transform"
+                style={{
+                  transform: "translate3d(-200px, -200px, 0)",
+                }}
               >
-                <div className="flex items-center gap-1 font-bold text-xs sm:text-[13px] tracking-wider uppercase">
-                  <span>Visit</span>
+                <div
+                  className={`w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-black/75 backdrop-blur-xl border border-white/30 text-white shadow-[0_16px_40px_rgba(0,0,0,0.35)] flex flex-col items-center justify-center text-center p-2 transition-all duration-300 ease-out select-none ${
+                    isHovered ? "scale-100 opacity-100" : "scale-0 opacity-0"
+                  }`}
+                >
+                  <div className="flex items-center gap-1 font-bold text-xs sm:text-[0.8125rem] tracking-wider uppercase">
+                    <span>Visit</span>
+                    <svg
+                      className="w-3.5 h-3.5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2.5}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M7 17L17 7M17 7H7M17 7V17"
+                      />
+                    </svg>
+                  </div>
+                  <span className="text-[0.625rem] text-zinc-300 font-mono tracking-tight mt-0.5">
+                    Live Site
+                  </span>
+                </div>
+              </div>
+
+              {/* Interactive Image Showcase (Clicking redirects to project liveUrl) */}
+              <a
+                href={currentProject.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Open ${currentProject.title} live website`}
+                className="block w-full h-full relative cursor-none"
+              >
+                {PROJECTS.map((project, idx) => {
+                  const isActive = idx === currentIndex;
+                  return (
+                    <div
+                      key={project.id}
+                      className={`absolute inset-0 flex items-center justify-center transition-all duration-500 ease-out ${
+                        isActive
+                          ? "opacity-100 scale-100 pointer-events-auto z-10"
+                          : "opacity-0 scale-95 pointer-events-none z-0"
+                      }`}
+                    >
+                      {/* Hover to scaling container without box borders */}
+                      <div className="group relative w-full h-full flex items-center justify-center">
+                        <Image
+                          src={project.image}
+                          alt={project.title}
+                          width={1536}
+                          height={1024}
+                          sizes="(min-width: 1024px) 58vw, 100vw"
+                          className="w-full h-full object-contain filter drop-shadow-[0_15px_35px_rgba(0,0,0,0.1)] scale-[1.1] transition-transform duration-700 ease-out group-hover:scale-[1.15] sm:group-hover:scale-[1.17] transform-gpu will-change-transform select-none"
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </a>
+            </div>
+          </div>
+
+          {/* ========================================================== */}
+          {/* RIGHT: Project Details, Live CTA & Slider Controls          */}
+          {/* ========================================================== */}
+          <div className="lg:col-span-5">
+            {/* Re-keyed per project so the details fade in on every switch */}
+            <div key={currentProject.id} className="motion-safe:animate-fade-up">
+              {/* Category & Counter */}
+              <div className="flex items-center gap-2.5 mb-3">
+                <span className="text-xs font-semibold uppercase tracking-widest text-zinc-400">
+                  {currentProject.category}
+                </span>
+                <span className="text-zinc-300">•</span>
+                <span className="text-xs font-mono font-medium text-zinc-400">
+                  0{currentIndex + 1} / 0{PROJECTS.length}
+                </span>
+              </div>
+
+              {/* Project Title with Live Link */}
+              <h3 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 mb-3">
+                <a
+                  href={currentProject.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-blue-600 transition-colors inline-flex items-center gap-2 group/title"
+                >
+                  <span>{currentProject.title}</span>
                   <svg
-                    className="w-3.5 h-3.5"
+                    className="w-5 h-5 text-zinc-400 group-hover/title:text-blue-600 transition-colors group-hover/title:translate-x-0.5 group-hover/title:-translate-y-0.5"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth={2.5}
+                    strokeWidth={2.2}
                   >
                     <path
                       strokeLinecap="round"
@@ -196,172 +280,106 @@ export default function Projects() {
                       d="M7 17L17 7M17 7H7M17 7V17"
                     />
                   </svg>
-                </div>
-                <span className="text-[10px] text-zinc-300 font-mono tracking-tight mt-0.5">
-                  Live Site
-                </span>
-              </div>
-            </div>
+                </a>
+              </h3>
 
-            {/* LEFT BUTTON: Previous Image */}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handlePrev();
-              }}
-              onMouseEnter={() => setIsHovered(false)}
-              onMouseLeave={() => setIsHovered(true)}
-              aria-label="Previous Project"
-              className="absolute left-1 sm:left-3 lg:-left-6 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-white/90 hover:bg-zinc-950 text-zinc-700 hover:text-white border border-zinc-200/90 hover:border-zinc-950 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center cursor-pointer backdrop-blur-sm group"
-            >
-              <svg
-                className="w-5 h-5 -translate-x-0.5 transition-transform duration-200 group-hover:-translate-x-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
+              {/* Tagline */}
+              <p className="text-base sm:text-lg text-zinc-700 font-medium mb-3">
+                {currentProject.tagline}
+              </p>
 
-            {/* RIGHT BUTTON: Next Image */}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleNext();
-              }}
-              onMouseEnter={() => setIsHovered(false)}
-              onMouseLeave={() => setIsHovered(true)}
-              aria-label="Next Project"
-              className="absolute right-1 sm:right-3 lg:-right-6 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-white/90 hover:bg-zinc-950 text-zinc-700 hover:text-white border border-zinc-200/90 hover:border-zinc-950 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center cursor-pointer backdrop-blur-sm group"
-            >
-              <svg
-                className="w-5 h-5 translate-x-0.5 transition-transform duration-200 group-hover:translate-x-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
+              {/* Description */}
+              <p className="text-sm sm:text-[0.9375rem] text-zinc-500 leading-relaxed mb-6 max-w-md">
+                {currentProject.description}
+              </p>
 
-            {/* Interactive Image Showcase (Clicking redirects to project liveUrl) */}
-            <a
-              href={currentProject.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`Open ${currentProject.title} live website`}
-              className="block w-full h-full relative cursor-none"
-            >
-              {PROJECTS.map((project, idx) => {
-                const isActive = idx === currentIndex;
-                return (
-                  <div
-                    key={project.id}
-                    className={`absolute inset-0 flex items-center justify-center px-2 sm:px-8 transition-all duration-500 ease-out ${
-                      isActive
-                        ? "opacity-100 scale-100 pointer-events-auto z-10"
-                        : "opacity-0 scale-95 pointer-events-none z-0"
-                    }`}
+              {/* Minimalist Tech Tags */}
+              <div className="flex flex-wrap items-center gap-2 mb-8">
+                {currentProject.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-3 py-1 text-[0.6875rem] sm:text-xs font-medium text-zinc-600 bg-zinc-100 rounded-full"
                   >
-                    {/* Hover to scaling container without box borders */}
-                    <div className="group relative w-full h-full flex items-center justify-center">
-                      <Image
-                        src={project.image}
-                        alt={project.title}
-                        width={1400}
-                        height={920}
-                        priority={idx === 0}
-                        className="w-auto h-auto max-w-full max-h-full object-contain filter drop-shadow-[0_15px_35px_rgba(0,0,0,0.1)] transition-transform duration-700 ease-out group-hover:scale-[1.05] sm:group-hover:scale-[1.07] transform-gpu will-change-transform select-none"
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </a>
-          </div>
+                    {tag}
+                  </span>
+                ))}
+              </div>
 
-          {/* ========================================================== */}
-          {/* PROJECT DETAILS & METADATA (Unboxed, Minimalist, Centered) */}
-          {/* ========================================================== */}
-          <div className="mt-6 sm:mt-8 text-center max-w-2xl mx-auto px-4">
-            {/* Category & Counter */}
-            <div className="flex items-center justify-center gap-2.5 mb-2">
-              <span className="text-xs font-semibold uppercase tracking-widest text-zinc-400">
-                {currentProject.category}
-              </span>
-              <span className="text-zinc-300">•</span>
-              <span className="text-xs font-mono font-medium text-zinc-400">
-                0{currentIndex + 1} / 0{PROJECTS.length}
-              </span>
-            </div>
-
-            {/* Project Title with Live Link */}
-            <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 mb-2">
+              {/* Visit Live Site CTA */}
               <a
                 href={currentProject.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-blue-600 transition-colors inline-flex items-center gap-2 group/title"
+                className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-black text-white text-xs sm:text-[0.8125rem] font-semibold tracking-tight shadow-[0_8px_20px_rgba(0,0,0,0.18)] hover:bg-zinc-800 hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
               >
-                <span>{currentProject.title}</span>
+                <span>Visit Live Site</span>
                 <svg
-                  className="w-4 h-4 text-zinc-400 group-hover/title:text-blue-600 transition-colors group-hover/title:translate-x-0.5 group-hover/title:-translate-y-0.5"
+                  className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth={2.2}
+                  strokeWidth={2.5}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M7 17L17 7M17 7H7M17 7V17"
-                  />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
                 </svg>
               </a>
-            </h3>
-
-            {/* Tagline */}
-            <p className="text-sm sm:text-base text-zinc-600 font-medium mb-3">
-              {currentProject.tagline}
-            </p>
-
-            {/* Description */}
-            <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed mb-5 max-w-xl mx-auto">
-              {currentProject.description}
-            </p>
-
-            {/* Minimalist Tech Tags */}
-            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mb-6">
-              {currentProject.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1 text-[11px] sm:text-xs font-medium text-zinc-600 bg-zinc-100 rounded-full"
-                >
-                  {tag}
-                </span>
-              ))}
             </div>
 
-            {/* Interactive Dots / Progress Indicator */}
-            <div className="flex items-center justify-center gap-2">
-              {PROJECTS.map((project, idx) => (
+            {/* Slider Controls: Progress Dots + Prev / Next */}
+            <div className="mt-10 pt-6 border-t border-zinc-100 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                {PROJECTS.map((project, idx) => (
+                  <button
+                    key={project.id}
+                    type="button"
+                    onClick={() => setCurrentIndex(idx)}
+                    aria-label={`Go to ${project.title}`}
+                    className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                      idx === currentIndex
+                        ? "w-8 bg-zinc-900"
+                        : "w-2 bg-zinc-200 hover:bg-zinc-400"
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <div className="flex items-center gap-3">
+                {/* PREVIOUS BUTTON */}
                 <button
-                  key={project.id}
                   type="button"
-                  onClick={() => setCurrentIndex(idx)}
-                  aria-label={`Go to ${project.title}`}
-                  className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                    idx === currentIndex
-                      ? "w-8 bg-zinc-900"
-                      : "w-2 bg-zinc-200 hover:bg-zinc-400"
-                  }`}
-                />
-              ))}
+                  onClick={handlePrev}
+                  aria-label="Previous Project"
+                  className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white hover:bg-zinc-950 text-zinc-700 hover:text-white border border-zinc-200/90 hover:border-zinc-950 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center cursor-pointer group"
+                >
+                  <svg
+                    className="w-5 h-5 -translate-x-0.5 transition-transform duration-200 group-hover:-translate-x-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+
+                {/* NEXT BUTTON */}
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  aria-label="Next Project"
+                  className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white hover:bg-zinc-950 text-zinc-700 hover:text-white border border-zinc-200/90 hover:border-zinc-950 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center cursor-pointer group"
+                >
+                  <svg
+                    className="w-5 h-5 translate-x-0.5 transition-transform duration-200 group-hover:translate-x-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>

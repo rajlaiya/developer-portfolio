@@ -102,10 +102,10 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="w-full bg-[#0a0a0c] text-white selection:bg-white selection:text-black rounded-t-[32px] sm:rounded-t-[48px] lg:rounded-t-[56px] border-t border-zinc-800/50 shadow-2xl relative z-10">
+    <footer className="w-full bg-[#0a0a0c] text-white selection:bg-white selection:text-black rounded-t-[2rem] sm:rounded-t-[3rem] lg:rounded-t-[3.5rem] border-t border-zinc-800/50 shadow-2xl relative z-10">
       {/* Outer container */}
-      <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="relative border border-zinc-800 bg-[#09090b] rounded-t-[20px] sm:rounded-t-[28px]">
+      <div className="w-full max-w-400 mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="relative border border-zinc-800 bg-[#09090b] rounded-t-[1.25rem] sm:rounded-t-[1.75rem]">
           
           {/* ========================================================= */}
           {/* TOP BORDER CROSSHAIRS (AT COLUMN INTERSECTIONS)           */}
@@ -123,7 +123,7 @@ export default function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
             
             {/* COLUMN 1: Logo & Tagline */}
-            <div className="p-6 sm:p-8 lg:p-9 border-b md:border-b-0 lg:border-r border-zinc-800 flex flex-col justify-between min-h-[220px] rounded-tl-[20px] sm:rounded-tl-[28px]">
+            <div className="p-6 sm:p-8 lg:p-9 border-b md:border-b-0 lg:border-r border-zinc-800 flex flex-col justify-between min-h-55 rounded-tl-[1.25rem] sm:rounded-tl-[1.75rem]">
               <div>
                 <Link
                   href="#home"
@@ -133,11 +133,11 @@ export default function Footer() {
                   <img
                     src={logoSrc}
                     alt="Coding_With_RL"
-                    className="h-12 sm:h-14 lg:h-16 w-auto max-w-[220px] sm:max-w-[240px] object-contain object-left transition-transform duration-300 group-hover:scale-[1.02] select-none"
+                    className="h-12 sm:h-14 lg:h-16 w-auto max-w-55 sm:max-w-60 object-contain object-left transition-transform duration-300 group-hover:scale-[1.02] select-none"
                     style={{ mixBlendMode: "screen" }}
                   />
                 </Link>
-                <p className="mt-4 sm:mt-6 text-[11px] sm:text-xs text-zinc-400 font-mono tracking-wider leading-relaxed uppercase max-w-[260px]">
+                <p className="mt-4 sm:mt-6 text-[0.6875rem] sm:text-xs text-zinc-400 font-mono tracking-wider leading-relaxed uppercase max-w-65">
                   CRAFTING THOUGHTFUL DIGITAL EXPERIENCES BUILT ON CLARITY, PURPOSE, AND PRECISION.
                 </p>
               </div>
@@ -149,7 +149,7 @@ export default function Footer() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="group flex items-center justify-between flex-1 min-h-[52px] px-6 sm:px-7 text-zinc-300 hover:text-white hover:bg-white/[0.04] transition-all duration-200 font-mono text-xs sm:text-[13px] tracking-wider uppercase"
+                  className="group flex items-center justify-between flex-1 min-h-13 px-6 sm:px-7 text-zinc-300 hover:text-white hover:bg-white/[0.04] transition-all duration-200 font-mono text-xs sm:text-[0.8125rem] tracking-wider uppercase"
                 >
                   <span>{item.name}</span>
                   <svg
@@ -170,10 +170,10 @@ export default function Footer() {
 
             {/* COLUMN 3: FOLLOW ON */}
             <div className="p-6 sm:p-8 lg:p-9 border-b md:border-b-0 lg:border-r border-zinc-800 flex flex-col justify-start">
-              <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.2em] text-zinc-500 uppercase mb-4 block">
+              <span className="text-[0.625rem] sm:text-[0.6875rem] font-mono tracking-[0.2em] text-zinc-500 uppercase mb-4 block">
                 FOLLOW ON
               </span>
-              <div className="flex flex-col gap-2 font-mono text-xs sm:text-[13px] tracking-wider">
+              <div className="flex flex-col gap-2 font-mono text-xs sm:text-[0.8125rem] tracking-wider">
                 {SOCIAL_LINKS.map((social) => (
                   <a
                     key={social.name}
@@ -189,8 +189,8 @@ export default function Footer() {
             </div>
 
             {/* COLUMN 4: Statement Quote */}
-            <div className="p-6 sm:p-8 lg:p-9 flex flex-col justify-start rounded-tr-[20px] sm:rounded-tr-[28px]">
-              <p className="text-xs sm:text-[13px] font-mono font-medium text-zinc-300 leading-relaxed uppercase max-w-[280px] tracking-wider">
+            <div className="p-6 sm:p-8 lg:p-9 flex flex-col justify-start rounded-tr-[1.25rem] sm:rounded-tr-[1.75rem]">
+              <p className="text-xs sm:text-[0.8125rem] font-mono font-medium text-zinc-300 leading-relaxed uppercase max-w-70 tracking-wider">
                 CREATING EXPERIENCES THAT BALANCE AESTHETICS, USABILITY, AND INTENT.
               </p>
             </div>
@@ -223,7 +223,7 @@ export default function Footer() {
               {/* COL 1: BOOK A CALL */}
               <Link
                 href="#contact"
-                className="group flex items-center justify-between h-[54px] px-6 sm:px-8 border-b md:border-b-0 lg:border-r border-zinc-800 hover:bg-white/[0.04] transition-all duration-200 font-mono text-xs sm:text-[13px] tracking-wider text-zinc-300 hover:text-white uppercase"
+                className="group flex items-center justify-between h-13.5 px-6 sm:px-8 border-b md:border-b-0 lg:border-r border-zinc-800 hover:bg-white/[0.04] transition-all duration-200 font-mono text-xs sm:text-[0.8125rem] tracking-wider text-zinc-300 hover:text-white uppercase"
               >
                 <span>BOOK A CALL</span>
                 <svg
@@ -243,7 +243,7 @@ export default function Footer() {
               {/* COL 2: CONTACT */}
               <Link
                 href="#contact"
-                className="group flex items-center justify-between h-[54px] px-6 sm:px-8 border-b md:border-b-0 lg:border-r border-zinc-800 hover:bg-white/[0.04] transition-all duration-200 font-mono text-xs sm:text-[13px] tracking-wider text-zinc-300 hover:text-white uppercase"
+                className="group flex items-center justify-between h-13.5 px-6 sm:px-8 border-b md:border-b-0 lg:border-r border-zinc-800 hover:bg-white/[0.04] transition-all duration-200 font-mono text-xs sm:text-[0.8125rem] tracking-wider text-zinc-300 hover:text-white uppercase"
               >
                 <span>CONTACT</span>
                 <svg
@@ -261,10 +261,10 @@ export default function Footer() {
               </Link>
 
               {/* COL 3: Grid cell spacer */}
-              <div className="hidden lg:block h-[54px] lg:border-r border-zinc-800" />
+              <div className="hidden lg:block h-13.5 lg:border-r border-zinc-800" />
 
               {/* COL 4: DESIGN AND DEVELOP BY */}
-              <div className="flex items-center h-[54px] px-6 sm:px-8 gap-2 font-mono text-[11px] sm:text-xs tracking-wider text-zinc-500 uppercase whitespace-nowrap overflow-hidden">
+              <div className="flex items-center h-13.5 px-6 sm:px-8 gap-2 font-mono text-[0.6875rem] sm:text-xs tracking-wider text-zinc-500 uppercase whitespace-nowrap overflow-hidden">
                 <span>DESIGN AND DEVELOP BY</span>
                 <div className="w-5 h-5 rounded-full overflow-hidden border border-zinc-700 bg-zinc-800 shrink-0 inline-flex items-center justify-center">
                   <img
@@ -315,7 +315,7 @@ export default function Footer() {
 
               {/* Floating 'BACK TO TOP ↑' pill badge on hover */}
               <div
-                className="absolute top-2 sm:top-4 px-3 py-1 rounded-full bg-zinc-900/90 border border-zinc-700/80 text-[10px] sm:text-xs font-mono tracking-widest text-zinc-300 opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 pointer-events-none shadow-xl z-20 flex items-center gap-1.5"
+                className="absolute top-2 sm:top-4 px-3 py-1 rounded-full bg-zinc-900/90 border border-zinc-700/80 text-[0.625rem] sm:text-xs font-mono tracking-widest text-zinc-300 opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 pointer-events-none shadow-xl z-20 flex items-center gap-1.5"
                 aria-hidden="true"
               >
                 <span>BACK TO TOP</span>

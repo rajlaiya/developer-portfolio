@@ -55,7 +55,7 @@ export default function Navbar() {
         {/* ======================================================== */}
         <div 
           className="absolute top-0 right-full pointer-events-none select-none"
-          style={{ width: "20px", height: "20px", marginRight: "-0.5px" }}
+          style={{ width: "1.25rem", height: "1.25rem", marginRight: "-0.5px" }}
           aria-hidden="true"
         >
           <svg
@@ -84,7 +84,7 @@ export default function Navbar() {
         {/* ======================================================== */}
         <div 
           className="absolute top-0 left-full pointer-events-none select-none"
-          style={{ width: "20px", height: "20px", marginLeft: "-0.5px" }}
+          style={{ width: "1.25rem", height: "1.25rem", marginLeft: "-0.5px" }}
           aria-hidden="true"
         >
           <svg
@@ -112,7 +112,7 @@ export default function Navbar() {
         {/* MAIN NAVBAR NOTCH BODY                                   */}
         {/* ======================================================== */}
         <nav
-          className="relative bg-black text-white h-[52px] sm:h-[54px] px-3.5 sm:px-5 flex items-center gap-3 sm:gap-6 rounded-b-[20px] select-none"
+          className="relative bg-black text-white h-13 sm:h-13.5 px-3.5 sm:px-5 flex items-center gap-3 sm:gap-6 rounded-b-[1.25rem] select-none"
           aria-label="Main Navigation"
         >
           {/* Brand Logo & Title */}
@@ -122,9 +122,9 @@ export default function Navbar() {
             onClick={() => setActiveSection("HOME")}
           >
             {/* Glossy 3D Blue Icon (Supaste-style squircle app icon) */}
-            <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-[9px] bg-gradient-to-b from-[#2e90fa] via-[#1570ef] to-[#175cd3] p-[1px] shadow-[0_2px_8px_rgba(23,92,211,0.5),inset_0_1px_1px_rgba(255,255,255,0.7)] flex items-center justify-center overflow-hidden transition-transform duration-200 group-hover:scale-105">
+            <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-[0.5625rem] bg-gradient-to-b from-[#2e90fa] via-[#1570ef] to-[#175cd3] p-[1px] shadow-[0_2px_8px_rgba(23,92,211,0.5),inset_0_1px_1px_rgba(255,255,255,0.7)] flex items-center justify-center overflow-hidden transition-transform duration-200 group-hover:scale-105">
               {/* Gloss highlight on top half */}
-              <div className="absolute top-0 left-0 right-0 h-[48%] bg-gradient-to-b from-white/60 to-white/10 rounded-t-[8px] pointer-events-none" />
+              <div className="absolute top-0 left-0 right-0 h-[48%] bg-gradient-to-b from-white/60 to-white/10 rounded-t-[0.5rem] pointer-events-none" />
               
               {/* Internal subtle icon graphic */}
               <svg
@@ -142,7 +142,7 @@ export default function Navbar() {
             </div>
 
             {/* Brand Text */}
-            <span className="font-semibold text-[14px] sm:text-[15px] tracking-tight text-white transition-opacity group-hover:opacity-90">
+            <span className="font-semibold text-[0.875rem] sm:text-[0.9375rem] tracking-tight text-white transition-opacity group-hover:opacity-90">
               Portfolio
             </span>
           </Link>
@@ -156,7 +156,7 @@ export default function Navbar() {
                   key={item.name}
                   href={item.href}
                   onClick={() => setActiveSection(item.name)}
-                  className={`text-[12px] lg:text-[13px] tracking-wide transition-colors duration-200 uppercase ${
+                  className={`text-[0.75rem] lg:text-[0.8125rem] tracking-wide transition-colors duration-200 uppercase ${
                     isActive
                       ? "text-white font-semibold"
                       : "text-zinc-400 hover:text-white font-medium"
@@ -173,7 +173,7 @@ export default function Navbar() {
             <Link
               href="#contact"
               onClick={() => setActiveSection("CONTACT")}
-              className="group relative flex items-center gap-1.5 bg-white text-black text-[11px] sm:text-[12px] font-bold tracking-wider uppercase px-3.5 sm:px-4 py-1.5 rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.2)] hover:bg-zinc-100 hover:shadow-[0_2px_6px_rgba(0,0,0,0.25)] transition-all duration-150 active:scale-95"
+              className="group relative flex items-center gap-1.5 bg-white text-black text-[0.6875rem] sm:text-[0.75rem] font-bold tracking-wider uppercase px-3.5 sm:px-4 py-1.5 rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.2)] hover:bg-zinc-100 hover:shadow-[0_2px_6px_rgba(0,0,0,0.25)] transition-all duration-150 active:scale-95"
             >
               <svg
                 className="w-3.5 h-3.5 text-black transition-transform group-hover:translate-x-0.5"
@@ -212,7 +212,7 @@ export default function Navbar() {
 
         {/* Mobile Dropdown Menu (Clean, animated dark card) */}
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-[calc(100%+8px)] left-0 right-0 bg-black/95 backdrop-blur-xl border border-zinc-800 rounded-2xl p-4 shadow-2xl flex flex-col gap-2 z-50">
+          <div className="md:hidden absolute top-[calc(100%+0.5rem)] left-0 right-0 bg-black/95 backdrop-blur-xl border border-zinc-800 rounded-2xl p-4 shadow-2xl flex flex-col gap-2 z-50">
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.name}

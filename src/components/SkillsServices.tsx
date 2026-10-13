@@ -88,7 +88,7 @@ function AnimatedMetric({
         {displayValue}
         {suffix}
       </span>
-      <span className="text-xs sm:text-[13px] font-medium text-zinc-500 mt-1">
+      <span className="text-xs sm:text-[0.8125rem] font-medium text-zinc-500 mt-1">
         {label}
       </span>
     </div>
@@ -485,14 +485,14 @@ export default function SkillsServices() {
               transform: `translateX(${scrollState.leftTranslateX}px)`,
               opacity: scrollState.opacity,
             }}
-            className="bg-[#f5f5f7] border border-zinc-200/70 rounded-[32px] p-6 sm:p-8 lg:p-9 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-[transform,opacity,box-shadow] duration-300 ease-out will-change-transform"
+            className="bg-[#f5f5f7] border border-zinc-200/70 rounded-[2rem] p-6 sm:p-8 lg:p-9 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-[transform,opacity,box-shadow] duration-300 ease-out will-change-transform"
           >
             <div>
               {/* Card Header */}
-              <h3 className="text-2xl sm:text-[28px] font-bold tracking-tight text-zinc-900 text-center">
+              <h3 className="text-2xl sm:text-[1.75rem] font-bold tracking-tight text-zinc-900 text-center">
                 Custom Categories
               </h3>
-              <p className="text-sm sm:text-[14px] text-zinc-500 leading-relaxed text-center max-w-md mx-auto mt-2 mb-5">
+              <p className="text-sm sm:text-[0.875rem] text-zinc-500 leading-relaxed text-center max-w-md mx-auto mt-2 mb-5">
                 Battle-tested frameworks, robust backend runtimes, and databases I use to architect scalable, high-converting web applications.
               </p>
 
@@ -501,7 +501,7 @@ export default function SkillsServices() {
                 <button
                   type="button"
                   onClick={() => setActiveCategory("all")}
-                  className={`px-4 py-2 rounded-full text-xs sm:text-[13px] font-semibold transition-all duration-200 ${
+                  className={`px-4 py-2 rounded-full text-xs sm:text-[0.8125rem] font-semibold transition-all duration-200 ${
                     activeCategory === "all"
                       ? "bg-[#0071e3] text-white shadow-[0_4px_12px_rgba(0,113,227,0.35)] scale-105"
                       : "bg-zinc-200/80 text-zinc-700 hover:bg-zinc-300"
@@ -512,7 +512,7 @@ export default function SkillsServices() {
                 <button
                   type="button"
                   onClick={() => setActiveCategory("frontend")}
-                  className={`px-4 py-2 rounded-full text-xs sm:text-[13px] font-medium transition-all duration-200 ${
+                  className={`px-4 py-2 rounded-full text-xs sm:text-[0.8125rem] font-medium transition-all duration-200 ${
                     activeCategory === "frontend"
                       ? "bg-[#0071e3] text-white shadow-[0_4px_12px_rgba(0,113,227,0.35)] scale-105 font-semibold"
                       : "bg-zinc-200/80 text-zinc-700 hover:bg-zinc-300"
@@ -523,7 +523,7 @@ export default function SkillsServices() {
                 <button
                   type="button"
                   onClick={() => setActiveCategory("backend")}
-                  className={`px-4 py-2 rounded-full text-xs sm:text-[13px] font-medium transition-all duration-200 ${
+                  className={`px-4 py-2 rounded-full text-xs sm:text-[0.8125rem] font-medium transition-all duration-200 ${
                     activeCategory === "backend"
                       ? "bg-[#0071e3] text-white shadow-[0_4px_12px_rgba(0,113,227,0.35)] scale-105 font-semibold"
                       : "bg-zinc-200/80 text-zinc-700 hover:bg-zinc-300"
@@ -534,7 +534,7 @@ export default function SkillsServices() {
                 <button
                   type="button"
                   onClick={() => setActiveCategory("database")}
-                  className={`px-4 py-2 rounded-full text-xs sm:text-[13px] font-medium transition-all duration-200 ${
+                  className={`px-4 py-2 rounded-full text-xs sm:text-[0.8125rem] font-medium transition-all duration-200 ${
                     activeCategory === "database"
                       ? "bg-[#0071e3] text-white shadow-[0_4px_12px_rgba(0,113,227,0.35)] scale-105 font-semibold"
                       : "bg-zinc-200/80 text-zinc-700 hover:bg-zinc-300"
@@ -545,7 +545,7 @@ export default function SkillsServices() {
                 <button
                   type="button"
                   onClick={() => setActiveCategory("tools")}
-                  className={`px-4 py-2 rounded-full text-xs sm:text-[13px] font-medium transition-all duration-200 ${
+                  className={`px-4 py-2 rounded-full text-xs sm:text-[0.8125rem] font-medium transition-all duration-200 ${
                     activeCategory === "tools"
                       ? "bg-[#0071e3] text-white shadow-[0_4px_12px_rgba(0,113,227,0.35)] scale-105 font-semibold"
                       : "bg-zinc-200/80 text-zinc-700 hover:bg-zinc-300"
@@ -574,7 +574,7 @@ export default function SkillsServices() {
                     <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-white shadow-[0_3px_10px_rgba(0,0,0,0.06),0_1px_2px_rgba(0,0,0,0.04)] border border-black/[0.04] flex items-center justify-center cursor-pointer transition-all duration-300 group-hover:scale-115 group-hover:-translate-y-1.5 group-hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)]">
                       {skill.icon}
                     </div>
-                    <span className="text-[11px] sm:text-xs font-medium text-zinc-600 mt-2 truncate max-w-full text-center group-hover:text-zinc-950 transition-colors">
+                    <span className="text-[0.6875rem] sm:text-xs font-medium text-zinc-600 mt-2 truncate max-w-full text-center group-hover:text-zinc-950 transition-colors">
                       {skill.name}
                     </span>
                   </div>
@@ -583,7 +583,7 @@ export default function SkillsServices() {
             </div>
 
             {/* Interactive Tooltip Card at the Bottom of Left Card */}
-            <div className="mt-4 pt-3 border-t border-zinc-200/80 flex items-center justify-between min-h-[46px]">
+            <div className="mt-4 pt-3 border-t border-zinc-200/80 flex items-center justify-between min-h-11.5">
               {hoveredSkill ? (
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center p-1">
@@ -593,7 +593,7 @@ export default function SkillsServices() {
                     <span className="text-xs font-bold text-zinc-900 block">
                       {hoveredSkill.name}
                     </span>
-                    <span className="text-[11px] text-zinc-500 font-medium">
+                    <span className="text-[0.6875rem] text-zinc-500 font-medium">
                       {hoveredSkill.level}
                     </span>
                   </div>
@@ -603,7 +603,7 @@ export default function SkillsServices() {
                   Hover over any technology icon to inspect details
                 </span>
               )}
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white text-[11px] font-semibold text-zinc-600 shadow-sm border border-zinc-200/60 shrink-0">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white text-[0.6875rem] font-semibold text-zinc-600 shadow-sm border border-zinc-200/60 shrink-0">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                 2.5+ Yrs Exp
               </span>
@@ -618,14 +618,14 @@ export default function SkillsServices() {
               transform: `translateX(${scrollState.rightTranslateX}px)`,
               opacity: scrollState.opacity,
             }}
-            className="bg-[#f5f5f7] border border-zinc-200/70 rounded-[32px] p-6 sm:p-8 lg:p-9 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-[transform,opacity,box-shadow] duration-300 ease-out will-change-transform"
+            className="bg-[#f5f5f7] border border-zinc-200/70 rounded-[2rem] p-6 sm:p-8 lg:p-9 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-[transform,opacity,box-shadow] duration-300 ease-out will-change-transform"
           >
             <div>
               {/* Card Header */}
-              <h3 className="text-2xl sm:text-[28px] font-bold tracking-tight text-zinc-900 text-center">
+              <h3 className="text-2xl sm:text-[1.75rem] font-bold tracking-tight text-zinc-900 text-center">
                 Find by App or Type
               </h3>
-              <p className="text-sm sm:text-[14px] text-zinc-500 leading-relaxed text-center max-w-md mx-auto mt-2 mb-5">
+              <p className="text-sm sm:text-[0.875rem] text-zinc-500 leading-relaxed text-center max-w-md mx-auto mt-2 mb-5">
                 Comprehensive engineering capabilities tailored for businesses — from initial architecture to reviving legacy code and deep debugging.
               </p>
 
@@ -709,12 +709,12 @@ export default function SkillsServices() {
                   <h4 className="text-base sm:text-lg font-bold text-zinc-900">
                     {selectedService.title}
                   </h4>
-                  <span className="text-[11px] font-semibold text-zinc-500 bg-zinc-100 px-2.5 py-0.5 rounded-full">
+                  <span className="text-[0.6875rem] font-semibold text-zinc-500 bg-zinc-100 px-2.5 py-0.5 rounded-full">
                     {selectedService.tagline}
                   </span>
                 </div>
 
-                <p className="text-xs sm:text-[13px] text-zinc-600 leading-relaxed mb-3">
+                <p className="text-xs sm:text-[0.8125rem] text-zinc-600 leading-relaxed mb-3">
                   {selectedService.description}
                 </p>
 
@@ -733,7 +733,7 @@ export default function SkillsServices() {
                           clipRule="evenodd"
                         />
                       </svg>
-                      <span className="text-[11px] sm:text-xs text-zinc-600 font-medium">
+                      <span className="text-[0.6875rem] sm:text-xs text-zinc-600 font-medium">
                         {ex}
                       </span>
                     </div>
@@ -768,7 +768,7 @@ export default function SkillsServices() {
         {/* ========================================================= */}
         <div
           ref={metricsRef}
-          className="mt-8 sm:mt-10 w-full bg-[#f5f5f7] border border-zinc-200/70 rounded-[28px] sm:rounded-[32px] p-6 sm:p-7 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] transition-all duration-300"
+          className="mt-8 sm:mt-10 w-full bg-[#f5f5f7] border border-zinc-200/70 rounded-[1.75rem] sm:rounded-[2rem] p-6 sm:p-7 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] transition-all duration-300"
         >
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-4 divide-y md:divide-y-0 md:divide-x divide-zinc-200/80">
             {/* Metric 1: 20+ Completed Projects */}
