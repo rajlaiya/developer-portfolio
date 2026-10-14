@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import HeroQuestions from "./HeroQuestions";
 
 // Shared constant so repeated mobile scroll events bail out without re-rendering
 const STATIC_SCROLL_STATE = {
@@ -21,6 +22,8 @@ export default function Hero() {
   const [scrollState, setScrollState] = useState(STATIC_SCROLL_STATE);
   // Mobile only: 0 = white panel with hidden text, 1 = black panel with fully visible text
   const [panelReveal, setPanelReveal] = useState(0);
+  // Chat-bubble questions only run while the portrait is hovered (or tapped on touch screens)
+  const [portraitHovered, setPortraitHovered] = useState(false);
 
   useEffect(() => {
     let animFrame: number;
@@ -141,7 +144,11 @@ export default function Hero() {
           {/* CENTER COLUMN: Hero Portrait (Full Head & Hair Visible)   */}
           {/* ========================================================= */}
           <div className="lg:col-span-4 z-10 flex justify-center items-end relative order-1 lg:order-2 h-115 sm:h-135 lg:h-155">
-            <div className="group relative w-full max-w-90 sm:max-w-105 lg:max-w-115 xl:max-w-125 h-full flex justify-center items-end cursor-pointer">
+            <div
+              onMouseEnter={() => setPortraitHovered(true)}
+              onMouseLeave={() => setPortraitHovered(false)}
+              className="group relative w-full max-w-90 sm:max-w-105 lg:max-w-115 xl:max-w-125 h-full flex justify-center items-end cursor-pointer"
+            >
               <Image
                 src="/assets/new_img.png"
                 alt="Raj Laiya - Full-stack Developer"
@@ -156,6 +163,9 @@ export default function Hero() {
               />
               {/* Bottom gradient fade for 100% seamless transition to pure white */}
               <div className="absolute inset-x-0 bottom-0 h-20 sm:h-28 bg-gradient-to-t from-white via-white/85 to-transparent pointer-events-none" />
+
+              {/* Chat bubbles: on hover the portrait asks the visitor a question, one at a time */}
+              <HeroQuestions active={portraitHovered} />
             </div>
           </div>
 
