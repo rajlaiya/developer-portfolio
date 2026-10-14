@@ -100,6 +100,12 @@ export default function SkillsServices() {
   const [hoveredSkill, setHoveredSkill] = useState<SkillItem | null>(null);
   const [activeServiceId, setActiveServiceId] = useState<string>("production");
 
+  // Swipe state for the service detail card (touch devices)
+  const serviceSwipeStartRef = useRef<{ x: number; y: number } | null>(null);
+  const serviceSwipeAxisRef = useRef<"x" | "y" | null>(null);
+  const [serviceSwipe, setServiceSwipe] = useState({ offset: 0, settling: false });
+  const [serviceSlideFrom, setServiceSlideFrom] = useState<"left" | "right" | null>(null);
+
   // Metrics observer to trigger counting animation every time the section enters viewport
   const metricsRef = useRef<HTMLDivElement>(null);
   const [isMetricsVisible, setIsMetricsVisible] = useState<boolean>(false);
@@ -457,6 +463,60 @@ export default function SkillsServices() {
   const selectedService =
     SERVICES.find((s) => s.id === activeServiceId) || SERVICES[0];
 
+  // Picking a tile swaps the card in place; swiping slides the next card in from the swipe side
+  const selectService = (id: string) => {
+    setServiceSlideFrom(null);
+    setActiveServiceId(id);
+  };
+
+  const showAdjacentService = (step: 1 | -1) => {
+    const idx = SERVICES.findIndex((s) => s.id === selectedService.id);
+    setServiceSlideFrom(step === 1 ? "right" : "left");
+    setActiveServiceId(SERVICES[(idx + step + SERVICES.length) % SERVICES.length].id);
+  };
+
+  // Touch swipe on the service detail card: left = next service, right = previous
+  const handleServiceTouchStart = (e: React.TouchEvent) => {
+    serviceSwipeStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    serviceSwipeAxisRef.current = null;
+  };
+
+  const handleServiceTouchMove = (e: React.TouchEvent) => {
+    const start = serviceSwipeStartRef.current;
+    if (!start) return;
+    const dx = e.touches[0].clientX - start.x;
+    const dy = e.touches[0].clientY - start.y;
+
+    // Lock to one axis after a small movement so vertical page scrolling is never hijacked
+    if (!serviceSwipeAxisRef.current && Math.max(Math.abs(dx), Math.abs(dy)) > 8) {
+      serviceSwipeAxisRef.current = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+    }
+    if (serviceSwipeAxisRef.current === "x") {
+      setServiceSwipe({ offset: dx, settling: false });
+    }
+  };
+
+  const handleServiceTouchEnd = (e: React.TouchEvent) => {
+    const start = serviceSwipeStartRef.current;
+    serviceSwipeStartRef.current = null;
+    if (!start || serviceSwipeAxisRef.current !== "x") return;
+
+    const dx = e.changedTouches[0].clientX - start.x;
+    if (Math.abs(dx) > 50) {
+      // Snap the drag offset away instantly; the new card's slide-in animation takes over
+      setServiceSwipe({ offset: 0, settling: false });
+      showAdjacentService(dx < 0 ? 1 : -1);
+    } else {
+      // Too short: ease the card back into place
+      setServiceSwipe({ offset: 0, settling: true });
+    }
+  };
+
+  const handleServiceTouchCancel = () => {
+    serviceSwipeStartRef.current = null;
+    setServiceSwipe({ offset: 0, settling: true });
+  };
+
   return (
     <section
       id="skills"
@@ -630,15 +690,15 @@ export default function SkillsServices() {
               </p>
 
               {/* Row 1: Glossy Colorful Squircle App Tiles (Matching Reference Image) */}
-              <div className="flex justify-center items-center gap-3 sm:gap-4 mb-3">
+              <div className="flex justify-center items-center gap-3 sm:gap-4 mb-5">
                 {SERVICES.map((service) => {
                   const isSelected = activeServiceId === service.id;
                   return (
                     <button
                       key={service.id}
                       type="button"
-                      onMouseEnter={() => setActiveServiceId(service.id)}
-                      onClick={() => setActiveServiceId(service.id)}
+                      onMouseEnter={() => selectService(service.id)}
+                      onClick={() => selectService(service.id)}
                       className={`group relative w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center cursor-pointer transition-all duration-300 shadow-md ${
                         isSelected
                           ? "ring-2 ring-offset-2 ring-black scale-110 -translate-y-1 shadow-lg"
@@ -659,86 +719,80 @@ export default function SkillsServices() {
                 })}
               </div>
 
-              {/* Row 2: Monochrome Squircle Icon Row (matching reference image: @, link, user, code, menu) */}
-              <div className="flex justify-center items-center gap-3 sm:gap-4 mb-3">
+              {/* Service Active Detail Box (swipe left / right for next / previous on touch screens) */}
+              <div
+                onTouchStart={handleServiceTouchStart}
+                onTouchMove={handleServiceTouchMove}
+                onTouchEnd={handleServiceTouchEnd}
+                onTouchCancel={handleServiceTouchCancel}
+                style={{
+                  transform: serviceSwipe.offset ? `translateX(${serviceSwipe.offset}px)` : undefined,
+                  opacity: 1 - Math.min(Math.abs(serviceSwipe.offset) / 300, 0.5),
+                }}
+                className={`touch-pan-y ${
+                  serviceSwipe.settling ? "transition-[transform,opacity] duration-300 ease-out" : ""
+                }`}
+              >
                 <div
-                  title="Direct Client Communication"
-                  className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-zinc-200/80 text-zinc-600 flex items-center justify-center hover:bg-zinc-300 hover:text-zinc-900 transition-colors cursor-default"
+                  key={selectedService.id}
+                  className={`bg-white rounded-2xl p-4 sm:p-5 border border-zinc-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] ${
+                    serviceSlideFrom === "right"
+                      ? "motion-safe:animate-slide-in-right"
+                      : serviceSlideFrom === "left"
+                        ? "motion-safe:animate-slide-in-left"
+                        : ""
+                  }`}
                 >
-                  <span className="text-lg font-bold">@</span>
-                </div>
-                <div
-                  title="API & Service Integrations"
-                  className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-zinc-200/80 text-zinc-600 flex items-center justify-center hover:bg-zinc-300 hover:text-zinc-900 transition-colors cursor-default"
-                >
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                  </svg>
-                </div>
-                <div
-                  title="Collaborative Team Delivery"
-                  className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-zinc-200/80 text-zinc-600 flex items-center justify-center hover:bg-zinc-300 hover:text-zinc-900 transition-colors cursor-default"
-                >
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
-                </div>
-                <div
-                  title="Clean Code & Modern Architecture"
-                  className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-zinc-200/80 text-zinc-600 flex items-center justify-center hover:bg-zinc-300 hover:text-zinc-900 transition-colors cursor-default"
-                >
-                  <span className="text-sm font-mono font-bold">&lt;/&gt;</span>
-                </div>
-                <div
-                  title="Flexible Project Scope"
-                  className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-zinc-200/80 text-zinc-600 flex items-center justify-center hover:bg-zinc-300 hover:text-zinc-900 transition-colors cursor-default"
-                >
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="4" y1="7" x2="20" y2="7" />
-                    <line x1="4" y1="12" x2="20" y2="12" />
-                    <line x1="4" y1="17" x2="20" y2="17" />
-                  </svg>
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="text-base sm:text-lg font-bold text-zinc-900">
+                      {selectedService.title}
+                    </h4>
+                    <span className="text-[0.6875rem] font-semibold text-zinc-500 bg-zinc-100 px-2.5 py-0.5 rounded-full">
+                      {selectedService.tagline}
+                    </span>
+                  </div>
+
+                  <p className="text-xs sm:text-[0.8125rem] text-zinc-600 leading-relaxed mb-3">
+                    {selectedService.description}
+                  </p>
+
+                  {/* Key Deliverables Bullet Points */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-zinc-100">
+                    {selectedService.examples.map((ex, idx) => (
+                      <div key={idx} className="flex items-start gap-2">
+                        <svg
+                          className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <span className="text-[0.6875rem] sm:text-xs text-zinc-600 font-medium">
+                          {ex}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              {/* Service Active Detail Box */}
-              <div className="bg-white rounded-2xl p-4 sm:p-5 border border-zinc-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="text-base sm:text-lg font-bold text-zinc-900">
-                    {selectedService.title}
-                  </h4>
-                  <span className="text-[0.6875rem] font-semibold text-zinc-500 bg-zinc-100 px-2.5 py-0.5 rounded-full">
-                    {selectedService.tagline}
-                  </span>
-                </div>
-
-                <p className="text-xs sm:text-[0.8125rem] text-zinc-600 leading-relaxed mb-3">
-                  {selectedService.description}
-                </p>
-
-                {/* Key Deliverables Bullet Points */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-zinc-100">
-                  {selectedService.examples.map((ex, idx) => (
-                    <div key={idx} className="flex items-start gap-2">
-                      <svg
-                        className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-[0.6875rem] sm:text-xs text-zinc-600 font-medium">
-                        {ex}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+              {/* Swipe hint dots (touch-sized screens only) */}
+              <div className="lg:hidden flex items-center justify-center gap-1.5 mt-3">
+                {SERVICES.map((service) => (
+                  <button
+                    key={service.id}
+                    type="button"
+                    onClick={() => selectService(service.id)}
+                    aria-label={`Show ${service.title}`}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      service.id === selectedService.id ? "w-6 bg-zinc-900" : "w-1.5 bg-zinc-300"
+                    }`}
+                  />
+                ))}
               </div>
             </div>
 
@@ -768,7 +822,7 @@ export default function SkillsServices() {
         {/* ========================================================= */}
         <div
           ref={metricsRef}
-          className="mt-8 sm:mt-10 w-full bg-[#f5f5f7] border border-zinc-200/70 rounded-[1.75rem] sm:rounded-[2rem] p-6 sm:p-7 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] transition-all duration-300"
+          className="mt-12 md:mt-10 w-full bg-[#f5f5f7] border border-zinc-200/70 rounded-[1.75rem] sm:rounded-[2rem] p-6 sm:p-7 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] transition-all duration-300"
         >
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-4 divide-y md:divide-y-0 md:divide-x divide-zinc-200/80">
             {/* Metric 1: 20+ Completed Projects */}

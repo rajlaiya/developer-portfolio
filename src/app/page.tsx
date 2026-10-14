@@ -13,7 +13,7 @@ export default function Home() {
       <Navbar />
 
       {/* Main Content Area */}
-      <main className="flex-1 w-full pt-20 sm:pt-24">
+      <main className="flex-1 w-full md:pt-24">
         {/* Hero Section */}
         <Hero />
 

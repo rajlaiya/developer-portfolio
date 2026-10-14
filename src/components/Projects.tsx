@@ -76,9 +76,12 @@ export default function Projects() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [isHovered, setIsHovered] = useState<boolean>(false);
+  // Mobile slides load lazily until the carousel nears the viewport, then all at once so a swipe never lands on a blank slide
+  const [preloadSlides, setPreloadSlides] = useState<boolean>(false);
 
   const stageRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   const handlePrev = useCallback(() => {
     setCurrentIndex((prev) => (prev === 0 ? PROJECTS.length - 1 : prev - 1));
@@ -99,7 +102,41 @@ export default function Projects() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handlePrev, handleNext]);
 
-  // Touch swipe handlers
+  // Mobile carousel: scroll to the slide when the index changes from the dots or keys
+  // (no-op on md+ where the track is hidden, and when the index came from a swipe)
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track || !track.clientWidth) return;
+    if (Math.round(track.scrollLeft / track.clientWidth) !== currentIndex) {
+      track.scrollTo({ left: currentIndex * track.clientWidth, behavior: "smooth" });
+    }
+  }, [currentIndex]);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setPreloadSlides(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "600px 0px" }
+    );
+    observer.observe(track);
+    return () => observer.disconnect();
+  }, []);
+
+  // Native scroll-snap moves the slides with the finger; React only hears which slide is centred
+  const handleTrackScroll = () => {
+    const track = trackRef.current;
+    if (!track || !track.clientWidth) return;
+    const idx = Math.round(track.scrollLeft / track.clientWidth);
+    setCurrentIndex(Math.max(0, Math.min(PROJECTS.length - 1, idx)));
+  };
+
+  // Touch swipe handlers (md+ image stage, e.g. tablets)
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.touches[0].clientX);
   };
@@ -133,27 +170,152 @@ export default function Projects() {
 
   const currentProject = PROJECTS[currentIndex];
 
+  // Rendered twice: under the mobile carousel, beside the arrows on md+
+  const progressDots = PROJECTS.map((project, idx) => (
+    <button
+      key={project.id}
+      type="button"
+      onClick={() => setCurrentIndex(idx)}
+      aria-label={`Go to ${project.title}`}
+      className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+        idx === currentIndex
+          ? "w-8 bg-zinc-900"
+          : "w-2 bg-zinc-200 hover:bg-zinc-400"
+      }`}
+    />
+  ));
+
+  // Shared by every mobile slide and the md+ details column
+  const renderDetails = (project: ProjectItem, idx: number) => (
+    <>
+      {/* Category & Counter */}
+      <div className="flex items-center gap-2.5 mb-[clamp(0.25rem,1svh,0.75rem)] md:mb-3">
+        <span className="text-[0.6875rem] md:text-xs font-semibold uppercase tracking-widest text-zinc-400">
+          {project.category}
+        </span>
+        <span className="text-zinc-300">•</span>
+        <span className="text-[0.6875rem] md:text-xs font-mono font-medium text-zinc-400">
+          0{idx + 1} / 0{PROJECTS.length}
+        </span>
+      </div>
+
+      {/* Project Title with Live Link */}
+      <h3 className="text-[clamp(1.5rem,3.8svh,2.25rem)] max-md:leading-[1.15] md:text-4xl font-bold tracking-tight text-zinc-900 mb-[clamp(0.25rem,1svh,0.75rem)] md:mb-3">
+        <a
+          href={project.liveUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-blue-600 transition-colors inline-flex items-center gap-2 group/title"
+        >
+          <span>{project.title}</span>
+          <svg
+            className="w-5 h-5 text-zinc-400 group-hover/title:text-blue-600 transition-colors group-hover/title:translate-x-0.5 group-hover/title:-translate-y-0.5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M7 17L17 7M17 7H7M17 7V17"
+            />
+          </svg>
+        </a>
+      </h3>
+
+      {/* Tagline */}
+      <p className="text-[clamp(0.875rem,2svh,1rem)] max-md:leading-snug md:text-lg text-zinc-700 font-medium mb-[clamp(0.25rem,1svh,0.75rem)] md:mb-3">
+        {project.tagline}
+      </p>
+
+      {/* Description */}
+      <p className="text-[clamp(0.8125rem,1.75svh,0.9375rem)] md:text-[0.9375rem] text-zinc-500 leading-relaxed mb-[clamp(0.5rem,1.8svh,1.5rem)] md:mb-6 max-w-md">
+        {project.description}
+      </p>
+
+      {/* Minimalist Tech Tags */}
+      <div className="flex flex-wrap items-center gap-2 md:mb-8">
+        {project.tags.map((tag) => (
+          <span
+            key={tag}
+            className="whitespace-nowrap px-3 py-1 text-[0.6875rem] sm:text-xs font-medium text-zinc-600 bg-zinc-100 rounded-full"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+    </>
+  );
+
   return (
+    // Mobile: the whole section fits one screen (below the fixed 3.5625rem navbar),
+    // with sizes and gaps scaling to the screen height and the image shrinking to fit what is left
     <section
       id="projects"
-      className="relative w-full py-20 sm:py-28 bg-white text-zinc-900 scroll-mt-20 overflow-hidden"
+      className="relative w-full h-svh min-h-[34rem] md:h-auto md:min-h-0 flex flex-col justify-center md:block pt-[calc(3.5625rem+clamp(0.5rem,2svh,1.25rem))] pb-[clamp(0.75rem,3svh,1.5rem)] md:py-28 bg-white text-zinc-900 md:scroll-mt-20 overflow-hidden"
     >
-      <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+      <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 max-md:flex max-md:flex-col max-md:min-h-0">
         {/* Section Header - Completely Unboxed & Minimalist */}
-        <div className="text-center mb-10 sm:mb-14">
-          <span className="text-xs font-semibold text-zinc-400 uppercase tracking-widest block mb-2.5">
+        <div className="shrink-0 text-center mb-[clamp(0.75rem,2.2svh,1.5rem)] md:mb-14">
+          <span className="text-[0.6875rem] md:text-xs font-semibold text-zinc-400 uppercase tracking-widest block mb-1 md:mb-2.5">
             Featured Works
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-zinc-900">
+          <h2 className="text-[clamp(1.375rem,3.4svh,1.875rem)] max-md:leading-[1.15] md:text-4xl lg:text-5xl font-bold tracking-tight text-zinc-900">
             Selected Projects and products
           </h2>
         </div>
 
         {/* ============================================================ */}
-        {/* SPLIT LAYOUT: Image showcase left, project details right     */}
-        {/* (stacks image -> details on mobile)                          */}
+        {/* MOBILE: native swipe carousel, one full-width slide per      */}
+        {/* project (image + details), dots underneath                   */}
         {/* ============================================================ */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+        <div className="md:hidden flex flex-col min-h-0">
+          <div
+            ref={trackRef}
+            onScroll={handleTrackScroll}
+            className="flex min-h-0 -mx-6 sm:-mx-8 overflow-x-auto overflow-y-hidden snap-x snap-mandatory overscroll-x-contain scrollbar-none [&::-webkit-scrollbar]:hidden"
+          >
+            {PROJECTS.map((project, idx) => (
+              <article
+                key={project.id}
+                aria-roledescription="slide"
+                aria-label={`${idx + 1} of ${PROJECTS.length}: ${project.title}`}
+                className="w-full shrink-0 snap-center snap-always px-6 sm:px-8 flex flex-col min-h-0"
+              >
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Open ${project.title} live website`}
+                  className="block min-h-20 h-[clamp(7.5rem,30svh,17rem)] mb-[clamp(0.75rem,2.2svh,1.5rem)]"
+                >
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    width={1536}
+                    height={1024}
+                    sizes="(min-width: 1024px) 58vw, 100vw"
+                    loading={preloadSlides ? "eager" : "lazy"}
+                    draggable={false}
+                    className="w-full h-full object-contain filter drop-shadow-[0_15px_35px_rgba(0,0,0,0.1)] select-none"
+                  />
+                </a>
+                {renderDetails(project, idx)}
+              </article>
+            ))}
+          </div>
+
+          <div className="shrink-0 flex items-center justify-center gap-2 mt-[clamp(0.75rem,2.2svh,1.25rem)]">
+            {progressDots}
+          </div>
+        </div>
+
+        {/* ============================================================ */}
+        {/* MD+: Image showcase left, project details right              */}
+        {/* (stacks image -> details below lg)                           */}
+        {/* ============================================================ */}
+        <div className="hidden md:grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* ========================================================== */}
           {/* LEFT: Borderless Image Stage with Hover Scale & Cursor Pill */}
           {/* ========================================================== */}
@@ -247,63 +409,7 @@ export default function Projects() {
           <div className="lg:col-span-5">
             {/* Re-keyed per project so the details fade in on every switch */}
             <div key={currentProject.id} className="motion-safe:animate-fade-up">
-              {/* Category & Counter */}
-              <div className="flex items-center gap-2.5 mb-3">
-                <span className="text-xs font-semibold uppercase tracking-widest text-zinc-400">
-                  {currentProject.category}
-                </span>
-                <span className="text-zinc-300">•</span>
-                <span className="text-xs font-mono font-medium text-zinc-400">
-                  0{currentIndex + 1} / 0{PROJECTS.length}
-                </span>
-              </div>
-
-              {/* Project Title with Live Link */}
-              <h3 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 mb-3">
-                <a
-                  href={currentProject.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-blue-600 transition-colors inline-flex items-center gap-2 group/title"
-                >
-                  <span>{currentProject.title}</span>
-                  <svg
-                    className="w-5 h-5 text-zinc-400 group-hover/title:text-blue-600 transition-colors group-hover/title:translate-x-0.5 group-hover/title:-translate-y-0.5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2.2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M7 17L17 7M17 7H7M17 7V17"
-                    />
-                  </svg>
-                </a>
-              </h3>
-
-              {/* Tagline */}
-              <p className="text-base sm:text-lg text-zinc-700 font-medium mb-3">
-                {currentProject.tagline}
-              </p>
-
-              {/* Description */}
-              <p className="text-sm sm:text-[0.9375rem] text-zinc-500 leading-relaxed mb-6 max-w-md">
-                {currentProject.description}
-              </p>
-
-              {/* Minimalist Tech Tags */}
-              <div className="flex flex-wrap items-center gap-2 mb-8">
-                {currentProject.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-3 py-1 text-[0.6875rem] sm:text-xs font-medium text-zinc-600 bg-zinc-100 rounded-full"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+              {renderDetails(currentProject, currentIndex)}
 
               {/* Visit Live Site CTA */}
               <a
@@ -327,21 +433,7 @@ export default function Projects() {
 
             {/* Slider Controls: Progress Dots + Prev / Next */}
             <div className="mt-10 pt-6 border-t border-zinc-100 flex items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                {PROJECTS.map((project, idx) => (
-                  <button
-                    key={project.id}
-                    type="button"
-                    onClick={() => setCurrentIndex(idx)}
-                    aria-label={`Go to ${project.title}`}
-                    className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                      idx === currentIndex
-                        ? "w-8 bg-zinc-900"
-                        : "w-2 bg-zinc-200 hover:bg-zinc-400"
-                    }`}
-                  />
-                ))}
-              </div>
+              <div className="flex items-center gap-2">{progressDots}</div>
 
               <div className="flex items-center gap-3">
                 {/* PREVIOUS BUTTON */}

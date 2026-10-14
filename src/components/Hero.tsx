@@ -3,24 +3,52 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
+// Shared constant so repeated mobile scroll events bail out without re-rendering
+const STATIC_SCROLL_STATE = {
+  leftTranslateX: 0,
+  rightTranslateX: 0,
+  opacity: 1,
+};
+
+const BIO =
+  "I build scalable web apps with modern technologies like Next.js, Vue.js. Passionate about clean code, and solving real-world problems.";
+
+const clamp01 = (value: number) => Math.max(0, Math.min(1, value));
+
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
-  const [scrollState, setScrollState] = useState({
-    leftTranslateX: 0,
-    rightTranslateX: 0,
-    opacity: 1,
-  });
+  const panelRef = useRef<HTMLDivElement>(null);
+  const [scrollState, setScrollState] = useState(STATIC_SCROLL_STATE);
+  // Mobile only: 0 = white panel with hidden text, 1 = black panel with fully visible text
+  const [panelReveal, setPanelReveal] = useState(0);
 
   useEffect(() => {
     let animFrame: number;
 
     const handleScroll = () => {
       if (!sectionRef.current) return;
+
+      // Mobile keeps the text static and instead turns the paragraph panel black as it scrolls into view
+      if (window.innerWidth < 768) {
+        setScrollState(STATIC_SCROLL_STATE);
+        if (!panelRef.current) return;
+
+        const viewportHeight = window.innerHeight;
+        const panelTop = panelRef.current.getBoundingClientRect().top + window.scrollY;
+
+        // Starts at the first scroll (or once the panel nears the fold) and completes
+        // when the panel's top edge reaches 55% of the viewport height
+        const start = Math.max(0, panelTop - viewportHeight);
+        const end = Math.max(start + 1, panelTop - viewportHeight * 0.55);
+        setPanelReveal(clamp01((window.scrollY - start) / (end - start)));
+        return;
+      }
+
       const rect = sectionRef.current.getBoundingClientRect();
       const heroHeight = rect.height || window.innerHeight;
 
-      // Distance to slide in/out (responsive: 90px on mobile, 160px on desktop)
-      const maxDistance = window.innerWidth < 768 ? 90 : 160;
+      // Distance to slide in/out
+      const maxDistance = 160;
 
       // When scrolled to the top (rect.top >= 0), it's 100% in view (progress = 1)
       // As user scrolls down (rect.top < 0), progress smoothly drops from 1 -> 0
@@ -64,15 +92,19 @@ export default function Hero() {
     };
   }, []);
 
+  // The background darkens first; the text fades and rises in over the last 60% of the reveal
+  const panelShade = Math.round(255 * (1 - panelReveal));
+  const textReveal = clamp01((panelReveal - 0.4) / 0.6);
+
   return (
     <section
       ref={sectionRef}
       id="home"
-      className="relative w-full min-h-[calc(100vh-5rem)] flex flex-col justify-center items-center pt-8 pb-12 lg:pt-0 lg:pb-8 overflow-x-hidden"
+      className="relative w-full min-h-[calc(100vh-5rem)] flex flex-col justify-center items-center pt-36 sm:pt-40 md:pt-8 pb-0 md:pb-12 lg:pt-0 lg:pb-8 overflow-x-hidden"
     >
       <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-end relative min-h-130 lg:min-h-155">
-          
+
           {/* ========================================================= */}
           {/* LEFT COLUMN: Badge, Name, Title, and Subtitle              */}
           {/* ========================================================= */}
@@ -81,7 +113,7 @@ export default function Hero() {
               transform: `translateX(${scrollState.leftTranslateX}px)`,
               opacity: scrollState.opacity,
             }}
-            className="lg:col-span-4 z-20 flex flex-col justify-end pb-4 lg:pb-12 text-left order-2 lg:order-1 transition-[transform,opacity] duration-150 ease-out will-change-transform"
+            className="lg:col-span-4 z-20 flex flex-col justify-end pb-4 lg:pb-12 text-left order-2 lg:order-1 transition-[transform,opacity] duration-150 ease-out md:will-change-transform"
           >
             {/* Status / Availability Badge */}
             <div className="inline-flex items-center gap-2 mb-4">
@@ -99,9 +131,9 @@ export default function Hero() {
               </span>
             </h1>
 
-            {/* Bio / Description */}
-            <p className="text-sm sm:text-[0.9375rem] text-zinc-600 leading-relaxed max-w-sm">
-              I build scalable web apps with modern technologies like Next.js, Vue.js. Passionate about clean code, and solving real-world problems.
+            {/* Bio / Description (on mobile it lives in the black panel below) */}
+            <p className="hidden md:block text-[0.9375rem] text-zinc-600 leading-relaxed max-w-sm">
+              {BIO}
             </p>
           </div>
 
@@ -129,27 +161,42 @@ export default function Hero() {
 
           {/* ========================================================= */}
           {/* RIGHT COLUMN: Lead-Generation Pitch & CTA Button           */}
+          {/* On mobile: full-width panel that turns black on scroll     */}
           {/* ========================================================= */}
           <div
-            style={{
-              transform: `translateX(${scrollState.rightTranslateX}px)`,
-              opacity: scrollState.opacity,
-            }}
-            className="lg:col-span-4 z-20 flex flex-col justify-end pb-4 lg:pb-12 text-left order-3 transition-[transform,opacity] duration-150 ease-out will-change-transform"
+            ref={panelRef}
+            style={
+              {
+                transform: `translateX(${scrollState.rightTranslateX}px)`,
+                opacity: scrollState.opacity,
+                "--panel-bg": `rgb(${panelShade} ${panelShade} ${panelShade})`,
+                "--panel-text": textReveal,
+                "--panel-shift": `${(1 - textReveal) * 24}px`,
+              } as React.CSSProperties
+            }
+            className="lg:col-span-4 z-20 flex flex-col justify-end pb-4 lg:pb-12 text-left order-3 transition-[transform,opacity] duration-150 ease-out md:will-change-transform max-sm:-mx-6 max-sm:px-6 sm:max-md:-mx-8 sm:max-md:px-8 max-md:pt-14 max-md:pb-16 max-md:bg-(--panel-bg,transparent) max-md:selection:bg-white max-md:selection:text-black"
           >
-            {/* Impact Statement / Lead Generation Paragraph */}
-            <p className="text-xs sm:text-[0.8125rem] lg:text-[0.875rem] text-zinc-600 leading-[1.65] max-w-xs sm:max-w-sm mb-5">
-              As a full-stack engineer, I partner with ambitious founders and teams to architect fast, resilient web applications that convert. From scalable architecture to intuitive UI, turning ideas into reliable products that drive revenue.
-            </p>
+            {/* Hidden until the mobile panel has darkened; always visible on md+ */}
+            <div className="max-md:opacity-(--panel-text,0) max-md:translate-y-(--panel-shift,24px)">
+              {/* Bio / Description (mobile copy) */}
+              <p className="md:hidden text-base text-zinc-100 text-justify leading-relaxed mb-6">
+                {BIO}
+              </p>
 
-            {/* Email Me CTA Button */}
-            <div>
-              <a
-                href="#contact"
-                className="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-black text-white text-xs sm:text-[0.8125rem] font-medium tracking-tight shadow-[0_8px_20px_rgba(0,0,0,0.18)] hover:bg-zinc-800 hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
-              >
-                Email Me
-              </a>
+              {/* Impact Statement / Lead Generation Paragraph */}
+              <p className="text-[0.9375rem] md:text-[0.8125rem] lg:text-[0.875rem] text-zinc-600 max-md:text-zinc-300 max-md:text-justify leading-[1.65] md:max-w-sm mb-5 max-md:mb-8">
+                As a full-stack engineer, I partner with ambitious founders and teams to architect fast, resilient web applications that convert. From scalable architecture to intuitive UI, turning ideas into reliable products that drive revenue.
+              </p>
+
+              {/* Email Me CTA Button */}
+              <div>
+                <a
+                  href="#contact"
+                  className="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-black text-white max-md:bg-white max-md:text-black text-xs sm:text-[0.8125rem] font-medium tracking-tight shadow-[0_8px_20px_rgba(0,0,0,0.18)] max-md:shadow-[0_8px_24px_rgba(255,255,255,0.12)] hover:bg-zinc-800 max-md:hover:bg-zinc-200 hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
+                >
+                  Email Me
+                </a>
+              </div>
             </div>
           </div>
 

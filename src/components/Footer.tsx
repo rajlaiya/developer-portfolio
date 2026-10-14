@@ -16,11 +16,9 @@ const QUICK_LINKS: QuickLink[] = [
 ];
 
 const SOCIAL_LINKS = [
-  { name: "TWITTER(X)", href: "https://x.com" },
   { name: "INSTAGRAM", href: "https://www.instagram.com/coding_with_rl" },
   { name: "LINKEDIN", href: "https://www.linkedin.com/in/laiya-raj-y21e502d01/" },
   { name: "GITHUB", href: "https://github.com/rajlaiya" },
-  { name: "EMAIL", href: "mailto:rajlaiya2017@gmail.com" },
 ];
 
 export default function Footer() {
@@ -104,7 +102,7 @@ export default function Footer() {
   return (
     <footer className="w-full bg-[#0a0a0c] text-white selection:bg-white selection:text-black rounded-t-[2rem] sm:rounded-t-[3rem] lg:rounded-t-[3.5rem] border-t border-zinc-800/50 shadow-2xl relative z-10">
       {/* Outer container */}
-      <div className="w-full max-w-400 mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <div className="w-full max-w-400 mx-auto px-4 sm:px-6 lg:px-8 py-5 md:py-12">
         <div className="relative border border-zinc-800 bg-[#09090b] rounded-t-[1.25rem] sm:rounded-t-[1.75rem]">
           
           {/* ========================================================= */}
@@ -123,7 +121,7 @@ export default function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
             
             {/* COLUMN 1: Logo & Tagline */}
-            <div className="p-6 sm:p-8 lg:p-9 border-b md:border-b-0 lg:border-r border-zinc-800 flex flex-col justify-between min-h-55 rounded-tl-[1.25rem] sm:rounded-tl-[1.75rem]">
+            <div className="px-6 py-5 sm:px-8 md:p-8 lg:p-9 border-b md:border-b-0 lg:border-r border-zinc-800 flex flex-col justify-between md:min-h-55 rounded-tl-[1.25rem] sm:rounded-tl-[1.75rem]">
               <div>
                 <Link
                   href="#home"
@@ -137,7 +135,7 @@ export default function Footer() {
                     style={{ mixBlendMode: "screen" }}
                   />
                 </Link>
-                <p className="mt-4 sm:mt-6 text-[0.6875rem] sm:text-xs text-zinc-400 font-mono tracking-wider leading-relaxed uppercase max-w-65">
+                <p className="mt-3 md:mt-6 text-[0.6875rem] sm:text-xs text-zinc-400 font-mono tracking-wider leading-relaxed uppercase max-w-65">
                   CRAFTING THOUGHTFUL DIGITAL EXPERIENCES BUILT ON CLARITY, PURPOSE, AND PRECISION.
                 </p>
               </div>
@@ -149,7 +147,7 @@ export default function Footer() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="group flex items-center justify-between flex-1 min-h-13 px-6 sm:px-7 text-zinc-300 hover:text-white hover:bg-white/[0.04] transition-all duration-200 font-mono text-xs sm:text-[0.8125rem] tracking-wider uppercase"
+                  className="group flex items-center justify-between flex-1 min-h-11 md:min-h-13 px-6 sm:px-7 text-zinc-300 hover:text-white hover:bg-white/[0.04] transition-all duration-200 font-mono text-xs sm:text-[0.8125rem] tracking-wider uppercase"
                 >
                   <span>{item.name}</span>
                   <svg
@@ -168,28 +166,59 @@ export default function Footer() {
               ))}
             </div>
 
-            {/* COLUMN 3: FOLLOW ON */}
-            <div className="p-6 sm:p-8 lg:p-9 border-b md:border-b-0 lg:border-r border-zinc-800 flex flex-col justify-start">
-              <span className="text-[0.625rem] sm:text-[0.6875rem] font-mono tracking-[0.2em] text-zinc-500 uppercase mb-4 block">
+            {/* COLUMN 3: FOLLOW ON (2-column button grid on mobile) */}
+            <div className="md:p-8 lg:p-9 lg:border-r border-zinc-800 flex flex-col justify-start">
+              <span className="text-[0.625rem] sm:text-[0.6875rem] font-mono tracking-[0.2em] text-zinc-500 uppercase mb-3 md:mb-4 block max-md:px-6 max-md:pt-5">
                 FOLLOW ON
               </span>
-              <div className="flex flex-col gap-2 font-mono text-xs sm:text-[0.8125rem] tracking-wider">
+              <div className="grid grid-cols-2 border-t border-zinc-800 md:border-t-0 md:flex md:flex-col md:gap-2 font-mono text-xs sm:text-[0.8125rem] tracking-wider">
                 {SOCIAL_LINKS.map((social) => (
                   <a
                     key={social.name}
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-zinc-400 hover:text-white transition-colors duration-150 uppercase block py-0.5"
+                    className="group text-zinc-400 hover:text-white transition-colors duration-150 uppercase block py-0.5 max-md:flex max-md:items-center max-md:justify-between max-md:gap-2 max-md:h-11 max-md:px-6 max-md:py-0 max-md:text-zinc-300 max-md:border-b max-md:border-zinc-800 max-md:odd:border-r max-md:last:odd:col-span-2 max-md:last:odd:border-r-0 max-md:hover:bg-white/[0.04]"
                   >
-                    {social.name}
+                    <span>{social.name}</span>
+                    <svg
+                      className="md:hidden w-3.5 h-3.5 text-zinc-500 group-hover:text-white transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
                   </a>
                 ))}
+
+                {/* Mobile only: CONTACT moves here from the lower tier (hidden on mobile) */}
+                <Link
+                  href="#contact"
+                  className="md:hidden group flex items-center justify-between gap-2 h-11 px-6 text-zinc-300 hover:text-white hover:bg-white/[0.04] border-b border-zinc-800 transition-colors duration-150 uppercase"
+                >
+                  <span>CONTACT</span>
+                  <svg
+                    className="w-3.5 h-3.5 text-zinc-500 group-hover:text-white transition-all duration-200 group-hover:translate-x-1 shrink-0"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </Link>
               </div>
             </div>
 
             {/* COLUMN 4: Statement Quote */}
-            <div className="p-6 sm:p-8 lg:p-9 flex flex-col justify-start rounded-tr-[1.25rem] sm:rounded-tr-[1.75rem]">
+            <div className="px-6 py-5 sm:px-8 md:p-8 lg:p-9 flex flex-col justify-start rounded-tr-[1.25rem] sm:rounded-tr-[1.75rem]">
               <p className="text-xs sm:text-[0.8125rem] font-mono font-medium text-zinc-300 leading-relaxed uppercase max-w-70 tracking-wider">
                 CREATING EXPERIENCES THAT BALANCE AESTHETICS, USABILITY, AND INTENT.
               </p>
@@ -198,9 +227,9 @@ export default function Footer() {
           </div>
 
           {/* ========================================================= */}
-          {/* MIDDLE HORIZONTAL DIVIDER WITH CROSSHAIRS                 */}
+          {/* MIDDLE HORIZONTAL DIVIDER WITH CROSSHAIRS (md+ only)      */}
           {/* ========================================================= */}
-          <div className="relative w-full border-t border-zinc-800">
+          <div className="relative w-full border-t border-zinc-800 max-md:hidden">
             {/* Desktop crosshairs at middle row */}
             <div className="hidden lg:block pointer-events-none select-none">
               <span className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 text-zinc-500 font-mono text-xs z-30">+</span>
@@ -218,12 +247,12 @@ export default function Footer() {
             {/* ======================================================= */}
             {/* LOWER TIER (BOOK A CALL, CONTACT, SPACER, CREATED BY)   */}
             {/* ======================================================= */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-              
+            <div className="grid grid-cols-2 lg:grid-cols-4">
+
               {/* COL 1: BOOK A CALL */}
               <Link
                 href="#contact"
-                className="group flex items-center justify-between h-13.5 px-6 sm:px-8 border-b md:border-b-0 lg:border-r border-zinc-800 hover:bg-white/[0.04] transition-all duration-200 font-mono text-xs sm:text-[0.8125rem] tracking-wider text-zinc-300 hover:text-white uppercase"
+                className="group flex items-center justify-between h-13.5 px-8 lg:border-r border-zinc-800 hover:bg-white/[0.04] transition-all duration-200 font-mono text-xs sm:text-[0.8125rem] tracking-wider text-zinc-300 hover:text-white uppercase"
               >
                 <span>BOOK A CALL</span>
                 <svg
@@ -243,7 +272,7 @@ export default function Footer() {
               {/* COL 2: CONTACT */}
               <Link
                 href="#contact"
-                className="group flex items-center justify-between h-13.5 px-6 sm:px-8 border-b md:border-b-0 lg:border-r border-zinc-800 hover:bg-white/[0.04] transition-all duration-200 font-mono text-xs sm:text-[0.8125rem] tracking-wider text-zinc-300 hover:text-white uppercase"
+                className="group flex items-center justify-between h-13.5 px-8 lg:border-r border-zinc-800 hover:bg-white/[0.04] transition-all duration-200 font-mono text-xs sm:text-[0.8125rem] tracking-wider text-zinc-300 hover:text-white uppercase"
               >
                 <span>CONTACT</span>
                 <svg
@@ -264,7 +293,7 @@ export default function Footer() {
               <div className="hidden lg:block h-13.5 lg:border-r border-zinc-800" />
 
               {/* COL 4: DESIGN AND DEVELOP BY */}
-              <div className="flex items-center h-13.5 px-6 sm:px-8 gap-2 font-mono text-[0.6875rem] sm:text-xs tracking-wider text-zinc-500 uppercase whitespace-nowrap overflow-hidden">
+              <div className="flex items-center h-13.5 px-8 gap-2 font-mono text-[0.6875rem] sm:text-xs tracking-wider text-zinc-500 uppercase whitespace-nowrap overflow-hidden">
                 <span>DESIGN AND DEVELOP BY</span>
                 <div className="w-5 h-5 rounded-full overflow-hidden border border-zinc-700 bg-zinc-800 shrink-0 inline-flex items-center justify-center">
                   <img
@@ -304,7 +333,7 @@ export default function Footer() {
             {/* ======================================================= */}
             <Link
               href="#home"
-              className="group relative w-full overflow-hidden py-6 sm:py-8 md:py-12 lg:py-14 px-2 sm:px-4 flex flex-col items-center justify-center select-none bg-black cursor-pointer focus:outline-none"
+              className="group relative w-full overflow-hidden py-5 sm:py-8 md:py-12 lg:py-14 px-2 sm:px-4 flex flex-col items-center justify-center select-none bg-black cursor-pointer focus:outline-none"
               aria-label="Back to top"
             >
               {/* Ambient radial glow bloom on hover */}

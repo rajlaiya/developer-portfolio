@@ -2,6 +2,15 @@
 
 import React, { useState } from "react";
 
+// Budget currencies; each placeholder is roughly the old $2,000 – $5,000 range in that currency
+const CURRENCIES = [
+  { code: "INR", label: "₹ INR", country: "India", example: "1,75,000 – 4,25,000" },
+  { code: "CAD", label: "C$ CAD", country: "Canada", example: "2,500 – 7,000" },
+  { code: "AED", label: "AED", country: "UAE", example: "7,500 – 18,000" },
+  { code: "LKR", label: "Rs LKR", country: "Sri Lanka", example: "600,000 – 1,500,000" },
+  { code: "SGD", label: "S$ SGD", country: "Singapore", example: "2,500 – 6,500" },
+];
+
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
@@ -9,9 +18,13 @@ export default function Contact() {
     phone: "",
     email: "",
     service: "",
+    currency: "INR",
     budget: "",
     message: "",
   });
+
+  const budgetCurrency =
+    CURRENCIES.find((c) => c.code === formData.currency) || CURRENCIES[0];
 
   const [submitted, setSubmitted] = useState(false);
   const maxChars = 250;
@@ -40,6 +53,7 @@ export default function Contact() {
         phone: "",
         email: "",
         service: "",
+        currency: "INR",
         budget: "",
         message: "",
       });
@@ -213,7 +227,7 @@ export default function Contact() {
                   </div>
                 </div>
 
-                {/* Row 3: Budget Field */}
+                {/* Row 3: Budget Field (currency selector + amount, like the phone field) */}
                 <div className="p-4 sm:p-5">
                   <label
                     htmlFor="budget"
@@ -221,15 +235,31 @@ export default function Contact() {
                   >
                     * Project Budget
                   </label>
-                  <input
-                    id="budget"
-                    name="budget"
-                    type="text"
-                    value={formData.budget}
-                    onChange={handleChange}
-                    placeholder="$2000 - $5000"
-                    className="w-full bg-transparent text-sm text-zinc-900 placeholder:text-zinc-400 font-medium focus:outline-none"
-                  />
+                  <div className="flex items-center gap-2">
+                    <select
+                      name="currency"
+                      value={formData.currency}
+                      onChange={handleChange}
+                      className="bg-transparent text-sm font-semibold text-zinc-800 focus:outline-none cursor-pointer border-r border-zinc-300 pr-2"
+                      aria-label="Budget Currency"
+                      title={`${budgetCurrency.country} (${budgetCurrency.code})`}
+                    >
+                      {CURRENCIES.map((c) => (
+                        <option key={c.code} value={c.code}>
+                          {c.label}
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      id="budget"
+                      name="budget"
+                      type="text"
+                      value={formData.budget}
+                      onChange={handleChange}
+                      placeholder={budgetCurrency.example}
+                      className="w-full min-w-0 bg-transparent text-sm text-zinc-900 placeholder:text-zinc-400 font-medium focus:outline-none"
+                    />
+                  </div>
                 </div>
 
                 {/* Row 4: Additional Project Details (250 chars max) */}

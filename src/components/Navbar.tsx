@@ -112,7 +112,7 @@ export default function Navbar() {
         {/* MAIN NAVBAR NOTCH BODY                                   */}
         {/* ======================================================== */}
         <nav
-          className="relative bg-black text-white h-13 sm:h-13.5 px-3.5 sm:px-5 flex items-center gap-3 sm:gap-6 rounded-b-[1.25rem] select-none"
+          className="relative bg-black text-white h-14.25 sm:h-14.75 md:h-13.5 pt-1.25 md:pt-0 px-3.5 sm:px-5 flex items-center gap-3 sm:gap-6 rounded-b-[1.25rem] select-none"
           aria-label="Main Navigation"
         >
           {/* Brand Logo & Title */}
