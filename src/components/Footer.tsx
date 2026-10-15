@@ -214,6 +214,28 @@ export default function Footer() {
                     <path d="m12 5 7 7-7 7" />
                   </svg>
                 </Link>
+
+                {/* Mobile only: RESUME moves here from the lower tier too, as a full-width row */}
+                <a
+                  href="/resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="md:hidden col-span-2 group flex items-center justify-between gap-2 h-11 px-6 text-zinc-300 hover:text-white hover:bg-white/[0.04] border-b border-zinc-800 transition-colors duration-150 uppercase"
+                >
+                  <span>RESUME</span>
+                  <svg
+                    className="w-3.5 h-3.5 text-zinc-500 group-hover:text-white transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M7 17 17 7" />
+                    <path d="M7 7h10v10" />
+                  </svg>
+                </a>
               </div>
             </div>
 
@@ -245,7 +267,7 @@ export default function Footer() {
             </div>
 
             {/* ======================================================= */}
-            {/* LOWER TIER (BOOK A CALL, CONTACT, SPACER, CREATED BY)   */}
+            {/* LOWER TIER (BOOK A CALL, CONTACT, RESUME, CREATED BY)   */}
             {/* ======================================================= */}
             <div className="grid grid-cols-2 lg:grid-cols-4">
 
@@ -289,8 +311,27 @@ export default function Footer() {
                 </svg>
               </Link>
 
-              {/* COL 3: Grid cell spacer */}
-              <div className="hidden lg:block h-13.5 lg:border-r border-zinc-800" />
+              {/* COL 3: RESUME (opens the PDF from /public in a new tab) */}
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center justify-between h-13.5 px-8 lg:border-r border-zinc-800 hover:bg-white/[0.04] transition-all duration-200 font-mono text-xs sm:text-[0.8125rem] tracking-wider text-zinc-300 hover:text-white uppercase"
+              >
+                <span>RESUME</span>
+                <svg
+                  className="w-3.5 h-3.5 text-zinc-500 group-hover:text-white transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M7 17 17 7" />
+                  <path d="M7 7h10v10" />
+                </svg>
+              </a>
 
               {/* COL 4: DESIGN AND DEVELOP BY */}
               <div className="flex items-center h-13.5 px-8 gap-2 font-mono text-[0.6875rem] sm:text-xs tracking-wider text-zinc-500 uppercase whitespace-nowrap overflow-hidden">

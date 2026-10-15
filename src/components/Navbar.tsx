@@ -13,6 +13,7 @@ const NAV_ITEMS: NavItem[] = [
   { name: "ABOUT", href: "#about" },
   { name: "SKILLS", href: "#skills" },
   { name: "PROJECTS", href: "#projects" },
+  { name: "EXPERIENCE", href: "#experience" },
 ];
 
 export default function Navbar() {

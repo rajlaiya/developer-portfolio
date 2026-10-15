@@ -11,6 +11,26 @@ const CURRENCIES = [
   { code: "SGD", label: "S$ SGD", country: "Singapore", example: "2,500 – 6,500" },
 ];
 
+// Shared style for the blue pill CTAs ("Book a Free Strategy Call" and the form submit)
+const CTA_BUTTON_CLASS =
+  "group inline-flex items-center gap-2.5 px-7 py-3 rounded-full bg-[#0066ff] text-white text-xs sm:text-sm font-semibold tracking-wide shadow-[0_6px_20px_rgba(0,102,255,0.32)] hover:bg-blue-700 hover:shadow-[0_8px_25px_rgba(0,102,255,0.42)] active:scale-95 transition-all duration-200";
+
+function ArrowIcon() {
+  return (
+    <svg
+      className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M7 17L17 7M17 7H7M17 7V17" />
+    </svg>
+  );
+}
+
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
@@ -94,21 +114,32 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Direct Contact Pill */}
-            <div className="mt-10 pt-6 border-t border-zinc-100 hidden lg:flex items-center gap-4">
+            <div className="mt-10">
+              {/* Strategy Call CTA */}
               <a
-                href="mailto:rajlaiya2017@gmail.com"
-                className="text-xs font-medium text-zinc-500 hover:text-black transition-colors"
+                href="mailto:rajlaiya2017@gmail.com?subject=Free%20Strategy%20Call"
+                className={CTA_BUTTON_CLASS}
               >
-                rajlaiya2017@gmail.com
+                <span>Book a Free Strategy Call</span>
+                <ArrowIcon />
               </a>
-              <span className="text-zinc-300">•</span>
-              <a
-                href="tel:+916355705208"
-                className="text-xs font-medium text-zinc-500 hover:text-black transition-colors"
-              >
-                +91 6355705208
-              </a>
+
+              {/* Direct Contact Pill */}
+              <div className="mt-6 pt-6 border-t border-zinc-100 hidden lg:flex items-center gap-4">
+                <a
+                  href="mailto:rajlaiya2017@gmail.com"
+                  className="text-xs font-medium text-zinc-500 hover:text-black transition-colors"
+                >
+                  rajlaiya2017@gmail.com
+                </a>
+                <span className="text-zinc-300">•</span>
+                <a
+                  href="tel:+916355705208"
+                  className="text-xs font-medium text-zinc-500 hover:text-black transition-colors"
+                >
+                  +91 6355705208
+                </a>
+              </div>
             </div>
           </div>
 
@@ -170,7 +201,7 @@ export default function Contact() {
                         type="tel"
                         value={formData.phone}
                         onChange={handleChange}
-                        placeholder="63557 05208"
+                        placeholder="XXXXX XXXXX"
                         className="w-full bg-transparent text-sm text-zinc-900 placeholder:text-zinc-400 font-medium focus:outline-none"
                       />
                     </div>
@@ -223,6 +254,8 @@ export default function Contact() {
                       <option value="E-Commerce Development">E-Commerce Development</option>
                       <option value="Mobile App Development">Mobile App Development</option>
                       <option value="UI/UX Design">UI/UX Design</option>
+                      <option value="CRM/CMS">CRM/CMS</option>
+                      <option value="Modern Landing Page">Modern Landing Page</option>
                     </select>
                   </div>
                 </div>
@@ -298,20 +331,10 @@ export default function Contact() {
                 <button
                   type="submit"
                   disabled={submitted}
-                  className="inline-flex items-center gap-2.5 px-7 py-3 rounded-full bg-[#0066ff] text-white text-xs sm:text-sm font-semibold tracking-wide shadow-[0_6px_20px_rgba(0,102,255,0.32)] hover:bg-blue-700 hover:shadow-[0_8px_25px_rgba(0,102,255,0.42)] active:scale-95 transition-all duration-200"
+                  className={CTA_BUTTON_CLASS}
                 >
-                  <span>{submitted ? "Message Received!" : "Book a Free Strategy Call"}</span>
-                  <svg
-                    className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M7 17L17 7M17 7H7M17 7V17" />
-                  </svg>
+                  <span>{submitted ? "Message Received!" : "Submit your enquiry"}</span>
+                  <ArrowIcon />
                 </button>
 
                 {submitted && (

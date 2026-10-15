@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import About from "@/components/About";
 import SkillsServices from "@/components/SkillsServices";
 import Projects from "@/components/Projects";
+import Experience from "@/components/Experience";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
@@ -25,6 +26,9 @@ export default function Home() {
 
         {/* Projects Section - Borderless Showcase with Hover Scaling & Side Nav */}
         <Projects />
+
+        {/* Experience Section - Professional Experience & Education Cards */}
+        <Experience />
 
         {/* Contact Section */}
         <Contact />
