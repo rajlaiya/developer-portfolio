@@ -388,6 +388,29 @@ export default function SkillsServices() {
       ),
     },
     {
+      id: "cms-crm",
+      title: "CMS & CRM Website Development",
+      tagline: "Manage content & customers without code",
+      description:
+        "Building content-managed websites and custom CRM dashboards so your team can update pages, publish posts, and track leads, clients, and sales on their own — no developer needed for day-to-day changes.",
+      examples: [
+        "Custom CMS websites with an easy admin panel",
+        "Blog, news & content publishing platforms",
+        "CRM dashboards for leads, clients & sales pipelines",
+        "Role-based admin access, forms & workflow automation",
+      ],
+      gradient: "from-[#30b0c7] to-[#40c8e0]",
+      shadowColor: "rgba(48,176,199,0.35)",
+      icon: (
+        <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="3" width="7" height="9" rx="1" />
+          <rect x="14" y="3" width="7" height="5" rx="1" />
+          <rect x="14" y="12" width="7" height="9" rx="1" />
+          <rect x="3" y="16" width="7" height="5" rx="1" />
+        </svg>
+      ),
+    },
+    {
       id: "backlog",
       title: "Backlog & Legacy Handling",
       tagline: "Unblocking features & refactoring stale code",
@@ -671,7 +694,7 @@ export default function SkillsServices() {
           </div>
 
           {/* ========================================================= */}
-          {/* CARD 2: SERVICES & SOLUTIONS (Find by App or Type Style)   */}
+          {/* CARD 2: SERVICES & SOLUTIONS (glossy app-tile style)       */}
           {/* ========================================================= */}
           <div
             style={{
@@ -683,14 +706,14 @@ export default function SkillsServices() {
             <div>
               {/* Card Header */}
               <h3 className="text-2xl sm:text-[1.75rem] font-bold tracking-tight text-zinc-900 text-center">
-                Find by App or Type
+                Services & Solutions
               </h3>
               <p className="text-sm sm:text-[0.875rem] text-zinc-500 leading-relaxed text-center max-w-md mx-auto mt-2 mb-5">
                 Comprehensive engineering capabilities tailored for businesses — from initial architecture to reviving legacy code and deep debugging.
               </p>
 
               {/* Row 1: Glossy Colorful Squircle App Tiles (Matching Reference Image) */}
-              <div className="flex justify-center items-center gap-3 sm:gap-4 mb-5">
+              <div className="flex justify-center items-center gap-2.5 sm:gap-4 mb-5">
                 {SERVICES.map((service) => {
                   const isSelected = activeServiceId === service.id;
                   return (
@@ -699,7 +722,7 @@ export default function SkillsServices() {
                       type="button"
                       onMouseEnter={() => selectService(service.id)}
                       onClick={() => selectService(service.id)}
-                      className={`group relative w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center cursor-pointer transition-all duration-300 shadow-md ${
+                      className={`group relative shrink-0 w-11 h-11 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center cursor-pointer transition-all duration-300 shadow-md ${
                         isSelected
                           ? "ring-2 ring-offset-2 ring-black scale-110 -translate-y-1 shadow-lg"
                           : "opacity-85 hover:opacity-100 hover:scale-105 hover:-translate-y-0.5"
@@ -743,7 +766,8 @@ export default function SkillsServices() {
                         : ""
                   }`}
                 >
-                  <div className="flex items-center justify-between mb-2">
+                  {/* Tagline drops below the title when both don't fit on one line */}
+                  <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 mb-2">
                     <h4 className="text-base sm:text-lg font-bold text-zinc-900">
                       {selectedService.title}
                     </h4>

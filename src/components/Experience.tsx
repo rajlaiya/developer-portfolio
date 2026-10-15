@@ -119,7 +119,7 @@ interface ExperienceCardProps {
   twoColumnHighlights?: boolean;
 }
 
-// Same look as the "Find by App or Type" card: glossy app-icon tiles that swap the detail box below
+// Same look as the "Services & Solutions" card: glossy app-icon tiles that swap the detail box below
 function ExperienceCard({ heading, intro, entries, twoColumnHighlights = false }: ExperienceCardProps) {
   const [activeId, setActiveId] = useState(entries[0].id);
   const active = entries.find((e) => e.id === activeId) || entries[0];

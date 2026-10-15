@@ -267,31 +267,11 @@ export default function Footer() {
             </div>
 
             {/* ======================================================= */}
-            {/* LOWER TIER (BOOK A CALL, CONTACT, RESUME, CREATED BY)   */}
+            {/* LOWER TIER (CONTACT, RESUME, CREATED BY)                */}
             {/* ======================================================= */}
             <div className="grid grid-cols-2 lg:grid-cols-4">
 
-              {/* COL 1: BOOK A CALL */}
-              <Link
-                href="#contact"
-                className="group flex items-center justify-between h-13.5 px-8 lg:border-r border-zinc-800 hover:bg-white/[0.04] transition-all duration-200 font-mono text-xs sm:text-[0.8125rem] tracking-wider text-zinc-300 hover:text-white uppercase"
-              >
-                <span>BOOK A CALL</span>
-                <svg
-                  className="w-3.5 h-3.5 text-zinc-500 group-hover:text-white transition-all duration-200 group-hover:translate-x-1 shrink-0"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M5 12h14" />
-                  <path d="m12 5 7 7-7 7" />
-                </svg>
-              </Link>
-
-              {/* COL 2: CONTACT */}
+              {/* COL 1: CONTACT */}
               <Link
                 href="#contact"
                 className="group flex items-center justify-between h-13.5 px-8 lg:border-r border-zinc-800 hover:bg-white/[0.04] transition-all duration-200 font-mono text-xs sm:text-[0.8125rem] tracking-wider text-zinc-300 hover:text-white uppercase"
@@ -311,7 +291,7 @@ export default function Footer() {
                 </svg>
               </Link>
 
-              {/* COL 3: RESUME (opens the PDF from /public in a new tab) */}
+              {/* COL 2: RESUME (opens the PDF from /public in a new tab) */}
               <a
                 href="/resume.pdf"
                 target="_blank"
@@ -333,8 +313,8 @@ export default function Footer() {
                 </svg>
               </a>
 
-              {/* COL 4: DESIGN AND DEVELOP BY */}
-              <div className="flex items-center h-13.5 px-8 gap-2 font-mono text-[0.6875rem] sm:text-xs tracking-wider text-zinc-500 uppercase whitespace-nowrap overflow-hidden">
+              {/* COL 3–4: DESIGN AND DEVELOP BY (spans two columns) */}
+              <div className="col-span-2 flex items-center h-13.5 px-8 gap-2 font-mono text-[0.6875rem] sm:text-xs tracking-wider text-zinc-500 uppercase whitespace-nowrap overflow-hidden">
                 <span>DESIGN AND DEVELOP BY</span>
                 <div className="w-5 h-5 rounded-full overflow-hidden border border-zinc-700 bg-zinc-800 shrink-0 inline-flex items-center justify-center">
                   <img
