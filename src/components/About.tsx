@@ -41,14 +41,14 @@ export default function About() {
 
   // Exact portfolio text - untouched
   const topHeading =
-    "MERN Stack Developer with 2.5+ years of experience building actual production web applications.";
+    "AI Full Stack / MERN Stack Developer with 2.5+ years of experience building actual production web applications.";
 
   const bodyText =
     "I love creating seamless user experiences and robust backend systems. My goal is to deliver high-quality, maintainable code and collaborate with ambitious teams to bring ideas to life with speed and precision.";
 
   const headingWords = useMemo(() => topHeading.split(" "), [topHeading]);
   const bodyWords = useMemo(() => bodyText.split(" "), [bodyText]);
-  const totalWords = headingWords.length + bodyWords.length; // 13 + 32 = 45 words
+  const totalWords = headingWords.length + bodyWords.length;
 
   // Animation timeline over generous scroll distance (h-[320vh]):
   // 0.04 -> 0.85: Slow, smooth word-by-word reveal as user scrolls through pinned section

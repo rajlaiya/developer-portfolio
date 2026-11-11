@@ -8,7 +8,9 @@ interface ProjectItem {
   title: string;
   category: string;
   tagline: string;
-  description: string;
+  // A project shows either a description paragraph or short highlight points
+  description?: string;
+  highlights?: { label: string; text: string }[];
   tags: string[];
   image: string;
   liveUrl: string;
@@ -69,6 +71,29 @@ const PROJECTS: ProjectItem[] = [
     tags: ["React", "Node.js", "Express", "Tailwind CSS"],
     image: "/projects/foodies.png",
     liveUrl: "https://foodies-cloud-kitchen.netlify.app/",
+  },
+  {
+    id: "networkleads",
+    title: "Multi-tenant Lead Capture CRM",
+    category: "SaaS CRM · In Trial",
+    tagline: "Load-tested at 1,000 concurrent users with 0% errors and 166ms median latency",
+    highlights: [
+      {
+        label: "Capture from anywhere",
+        text: "JavaScript SDK, WordPress plugin, GTM template, signed webhooks and REST API, with funnel analytics and CSV/PDF exports.",
+      },
+      {
+        label: "Secure by design",
+        text: "SSRF-safe website scanner, spam filtering, duplicate-safe lead ingestion and AES-256-GCM encryption.",
+      },
+      {
+        label: "Thoroughly tested",
+        text: "430+ unit, integration and Playwright tests.",
+      },
+    ],
+    tags: ["Multi-tenant SaaS", "Headless Chromium", "AES-256-GCM", "Playwright"],
+    image: "/projects/networklead_crm.png",
+    liveUrl: "https://networkleads.vercel.app/",
   },
 ];
 
@@ -229,10 +254,27 @@ export default function Projects() {
         {project.tagline}
       </p>
 
-      {/* Description */}
-      <p className="text-[clamp(0.8125rem,1.75svh,0.9375rem)] md:text-[0.9375rem] text-zinc-500 leading-relaxed mb-[clamp(0.5rem,1.8svh,1.5rem)] md:mb-6 max-w-md">
-        {project.description}
-      </p>
+      {/* Description, or highlight points when the project has them */}
+      {project.highlights ? (
+        <ul className="text-[clamp(0.8125rem,1.75svh,0.9375rem)] md:text-[0.9375rem] text-zinc-500 max-md:leading-snug md:leading-relaxed mb-[clamp(0.5rem,1.8svh,1.5rem)] md:mb-6 max-w-md space-y-[clamp(0.25rem,0.9svh,0.625rem)] md:space-y-2.5">
+          {project.highlights.map((point) => (
+            <li key={point.label} className="flex gap-2.5">
+              <span
+                aria-hidden="true"
+                className="mt-[0.45em] md:mt-[0.6em] w-1.5 h-1.5 shrink-0 rounded-full bg-zinc-400"
+              />
+              <span>
+                <span className="font-medium text-zinc-800">{point.label}:</span>{" "}
+                {point.text}
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-[clamp(0.8125rem,1.75svh,0.9375rem)] md:text-[0.9375rem] text-zinc-500 leading-relaxed mb-[clamp(0.5rem,1.8svh,1.5rem)] md:mb-6 max-w-md">
+          {project.description}
+        </p>
+      )}
 
       {/* Minimalist Tech Tags */}
       <div className="flex flex-wrap items-center gap-2 md:mb-8">

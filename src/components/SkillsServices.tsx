@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useId } from "react";
 
 interface SkillItem {
   id: string;
@@ -92,6 +92,91 @@ function AnimatedMetric({
         {label}
       </span>
     </div>
+  );
+}
+
+// Logos with masks/filters get a unique id per render: an icon shows twice while hovered
+// (grid tile + details bar), and duplicate SVG ids can resolve to the wrong element
+
+// VS Code logo: three blue panels clipped to the ribbon shape
+function VSCodeIcon() {
+  const id = useId();
+  return (
+    <svg className="w-7 h-7" viewBox="0 0 128 128">
+      <mask id={`${id}-m`} maskUnits="userSpaceOnUse" x="0" y="0" width="128" height="128">
+        <path
+          fill="#fff"
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M90.767 127.126a7.968 7.968 0 0 0 6.35-.244l26.353-12.681a8 8 0 0 0 4.53-7.209V21.009a8 8 0 0 0-4.53-7.21L97.117 1.12a7.97 7.97 0 0 0-9.093 1.548l-50.45 46.026L15.6 32.013a5.328 5.328 0 0 0-6.807.302l-7.048 6.411a5.335 5.335 0 0 0-.006 7.888L20.796 64 1.74 81.387a5.336 5.336 0 0 0 .006 7.887l7.048 6.411a5.327 5.327 0 0 0 6.807.303l21.974-16.68 50.45 46.025a7.96 7.96 0 0 0 2.743 1.793Zm5.252-92.183L57.74 64l38.28 29.058V34.943Z"
+        />
+      </mask>
+      <g mask={`url(#${id}-m)`}>
+        <path
+          fill="#0065A9"
+          d="M123.471 13.82 97.097 1.12A7.973 7.973 0 0 0 88 2.668L1.662 81.387a5.333 5.333 0 0 0 .006 7.887l7.052 6.411a5.333 5.333 0 0 0 6.811.303l103.971-78.875c3.488-2.646 8.498-.158 8.498 4.22v-.306a8.001 8.001 0 0 0-4.529-7.208Z"
+        />
+        <path
+          fill="#007ACC"
+          d="m123.471 114.181-26.374 12.698A7.973 7.973 0 0 1 88 125.333L1.662 46.613a5.333 5.333 0 0 1 .006-7.887l7.052-6.411a5.333 5.333 0 0 1 6.811-.303l103.971 78.874c3.488 2.647 8.498.159 8.498-4.219v.306a8.001 8.001 0 0 1-4.529 7.208Z"
+        />
+        <path
+          fill="#1F9CF0"
+          d="M97.098 126.882A7.977 7.977 0 0 1 88 125.333c2.952 2.952 8 .861 8-3.314V5.98c0-4.175-5.048-6.266-8-3.313a7.977 7.977 0 0 1 9.098-1.549L123.467 13.8A8 8 0 0 1 128 21.01v85.982a8 8 0 0 1-4.533 7.21l-26.369 12.681Z"
+        />
+      </g>
+    </svg>
+  );
+}
+
+// Google Antigravity logo: blurred colour blobs clipped to the arch shape
+// region = blur filter bounds [x, y, width, height] in the 24x24 viewBox
+const ANTIGRAVITY_BLOBS = [
+  { fill: "#FFE432", blur: 1.117, region: [-3.288, -11.917, 19.838, 17.587], d: "M-1.018-3.992c-.408 3.591 2.686 6.89 6.91 7.37 4.225.48 7.98-2.043 8.387-5.633.408-3.59-2.686-6.89-6.91-7.37-4.225-.479-7.98 2.043-8.387 5.633z" },
+  { fill: "#FC413D", blur: 5.4, region: [4.251, -13.493, 38.9, 38.565], d: "M15.269 7.747c1.058 4.557 5.691 7.374 10.348 6.293 4.657-1.082 7.575-5.653 6.516-10.21-1.058-4.556-5.691-7.374-10.348-6.292-4.657 1.082-7.575 5.653-6.516 10.21z" },
+  { fill: "#00B95C", blur: 4.591, region: [-21.889, -10.592, 40.955, 36.517], d: "M-12.443 10.804c1.338 4.703 7.36 7.11 13.453 5.378 6.092-1.733 9.947-6.95 8.61-11.652C8.282-.173 2.26-2.58-3.833-.848-9.925.884-13.78 6.1-12.443 10.804z" },
+  { fill: "#00B95C", blur: 4.591, region: [-21.889, -10.592, 40.955, 36.517], d: "M-12.443 10.804c1.338 4.703 7.36 7.11 13.453 5.378 6.092-1.733 9.947-6.95 8.61-11.652C8.282-.173 2.26-2.58-3.833-.848-9.925.884-13.78 6.1-12.443 10.804z" },
+  { fill: "#00B95C", blur: 4.591, region: [-19.099, -10.278, 36.632, 36.595], d: "M-7.608 14.703c3.352 3.424 9.126 3.208 12.896-.483 3.77-3.69 4.108-9.459.756-12.883C2.69-2.087-3.083-1.871-6.853 1.82c-3.77 3.69-4.108 9.458-.755 12.883z" },
+  { fill: "#3186FF", blur: 4.363, region: [0.981, 8.758, 33.533, 34.087], d: "M9.932 27.617c1.04 4.482 5.384 7.303 9.7 6.3 4.316-1.002 6.971-5.448 5.93-9.93-1.04-4.483-5.384-7.304-9.7-6.301-4.316 1.002-6.971 5.448-5.93 9.93z" },
+  { fill: "#FBBC04", blur: 3.954, region: [-6.143, -21.659, 35.978, 35.276], d: "M2.572-8.185C.392-3.329 2.778 2.472 7.9 4.771c5.122 2.3 11.042.227 13.222-4.63 2.18-4.855-.205-10.656-5.327-12.955-5.122-2.3-11.042-.227-13.222 4.63z" },
+  { fill: "#3186FF", blur: 3.531, region: [-11.96, -0.46, 45.114, 46.523], d: "M-3.267 38.686c-5.277-2.072 3.742-19.117 5.984-24.83 2.243-5.712 8.34-8.664 13.616-6.592 5.278 2.071 11.533 13.482 9.29 19.195-2.242 5.713-23.613 14.298-28.89 12.227z" },
+  { fill: "#749BFF", blur: 3.159, region: [10.485, 0.58, 25.094, 24.054], d: "M28.71 17.471c-1.413 1.649-5.1.808-8.236-1.878-3.135-2.687-4.531-6.201-3.118-7.85 1.412-1.649 5.1-.808 8.235 1.878s4.532 6.2 3.119 7.85z" },
+  { fill: "#FC413D", blur: 2.669, region: [5.833, -12.467, 33.508, 30.007], d: "M18.163 9.077c5.81 3.93 12.502 4.19 14.946.577 2.443-3.612-.287-9.727-6.098-13.658-5.81-3.931-12.502-4.19-14.946-.577-2.443 3.612.287 9.727 6.098 13.658z" },
+  { fill: "#FFEE48", blur: 3.303, region: [-8.355, -8.876, 22.194, 26.151], d: "M-.915 2.684c-1.44 3.473-.97 6.967 1.05 7.804 2.02.837 4.824-1.3 6.264-4.772 1.44-3.473.97-6.967-1.05-7.804-2.02-.837-4.824 1.3-6.264 4.772z" },
+];
+
+function AntigravityIcon() {
+  const id = useId();
+  return (
+    <svg className="w-7 h-7" viewBox="0 0 24 24">
+      <defs>
+        <mask id={`${id}-m`} maskUnits="userSpaceOnUse" x="0" y="1" width="24" height="23">
+          <path
+            fill="#fff"
+            d="M21.751 22.607c1.34 1.005 3.35.335 1.508-1.508C17.73 15.74 18.904 1 12.037 1 5.17 1 6.342 15.74.815 21.1c-2.01 2.009.167 2.511 1.507 1.506 5.192-3.517 4.857-9.714 9.715-9.714 4.857 0 4.522 6.197 9.714 9.715z"
+          />
+        </mask>
+        {ANTIGRAVITY_BLOBS.map((blob, i) => (
+          <filter
+            key={i}
+            id={`${id}-b${i}`}
+            filterUnits="userSpaceOnUse"
+            colorInterpolationFilters="sRGB"
+            x={blob.region[0]}
+            y={blob.region[1]}
+            width={blob.region[2]}
+            height={blob.region[3]}
+          >
+            <feGaussianBlur stdDeviation={blob.blur} />
+          </filter>
+        ))}
+      </defs>
+      <g mask={`url(#${id}-m)`}>
+        {ANTIGRAVITY_BLOBS.map((blob, i) => (
+          <path key={i} d={blob.d} fill={blob.fill} filter={`url(#${id}-b${i})`} />
+        ))}
+      </g>
+    </svg>
   );
 }
 
@@ -364,7 +449,40 @@ export default function SkillsServices() {
         </svg>
       ),
     },
+    {
+      id: "claudecode",
+      name: "Claude Code",
+      category: "tools",
+      level: "Agentic Coding & AI-Assisted Development",
+      icon: (
+        <svg className="w-7 h-7" viewBox="0 0 24 24">
+          <path
+            fill="#D97757"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M20.998 10.949H24v3.102h-3v3.028h-1.487V20H18v-2.921h-1.487V20H15v-2.921H9V20H7.488v-2.921H6V20H4.487v-2.921H3V14.05H0V10.95h3V5h17.998v5.949zM6 10.949h1.488V8.102H6v2.847zm10.51 0H18V8.102h-1.49v2.847z"
+          />
+        </svg>
+      ),
+    },
+    {
+      id: "antigravity",
+      name: "Antigravity",
+      category: "tools",
+      level: "Agent-First IDE & Multi-Agent Workflows",
+      icon: <AntigravityIcon />,
+    },
+    {
+      id: "vscode",
+      name: "VS Code",
+      category: "tools",
+      level: "Daily Editor, Debugging & Extensions",
+      icon: <VSCodeIcon />,
+    },
   ];
+
+  const skillCount = (category: SkillItem["category"]) =>
+    SKILLS.filter((s) => s.category === category).length;
 
   const SERVICES: ServiceItem[] = [
     {
@@ -590,7 +708,7 @@ export default function SkillsServices() {
                       : "bg-zinc-200/80 text-zinc-700 hover:bg-zinc-300"
                   }`}
                 >
-                  All Stack 10
+                  All Stack {SKILLS.length}
                 </button>
                 <button
                   type="button"
@@ -601,7 +719,7 @@ export default function SkillsServices() {
                       : "bg-zinc-200/80 text-zinc-700 hover:bg-zinc-300"
                   }`}
                 >
-                  Frontend 5
+                  Frontend {skillCount("frontend")}
                 </button>
                 <button
                   type="button"
@@ -612,7 +730,7 @@ export default function SkillsServices() {
                       : "bg-zinc-200/80 text-zinc-700 hover:bg-zinc-300"
                   }`}
                 >
-                  Backend 2
+                  Backend {skillCount("backend")}
                 </button>
                 <button
                   type="button"
@@ -623,7 +741,7 @@ export default function SkillsServices() {
                       : "bg-zinc-200/80 text-zinc-700 hover:bg-zinc-300"
                   }`}
                 >
-                  Databases 2
+                  Databases {skillCount("database")}
                 </button>
                 <button
                   type="button"
@@ -634,7 +752,7 @@ export default function SkillsServices() {
                       : "bg-zinc-200/80 text-zinc-700 hover:bg-zinc-300"
                   }`}
                 >
-                  Tools 1
+                  Tools {skillCount("tools")}
                 </button>
                 {/* Round Plus Pill Button matching reference image */}
                 <span
