@@ -100,10 +100,10 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="w-full bg-[#0a0a0c] text-white selection:bg-white selection:text-black rounded-t-[2rem] sm:rounded-t-[3rem] lg:rounded-t-[3.5rem] border-t border-zinc-800/50 shadow-2xl relative z-10">
+    <footer className="w-full bg-[#0a0a0c] text-white selection:bg-white selection:text-black border-4 border-white shadow-2xl relative z-10">
       {/* Outer container */}
       <div className="w-full max-w-400 mx-auto px-4 sm:px-6 lg:px-8 py-5 md:py-12">
-        <div className="relative border border-zinc-800 bg-[#09090b] rounded-t-[1.25rem] sm:rounded-t-[1.75rem]">
+        <div className="relative border border-zinc-800 bg-[#09090b]">
           
           {/* ========================================================= */}
           {/* TOP BORDER CROSSHAIRS (AT COLUMN INTERSECTIONS)           */}
@@ -121,7 +121,7 @@ export default function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
             
             {/* COLUMN 1: Logo & Tagline */}
-            <div className="px-6 py-5 sm:px-8 md:p-8 lg:p-9 border-b md:border-b-0 lg:border-r border-zinc-800 flex flex-col justify-between md:min-h-55 rounded-tl-[1.25rem] sm:rounded-tl-[1.75rem]">
+            <div className="px-6 py-5 sm:px-8 md:p-8 lg:p-9 border-b md:border-b-0 lg:border-r border-zinc-800 flex flex-col justify-between md:min-h-55">
               <div>
                 <Link
                   href="#home"
@@ -240,7 +240,7 @@ export default function Footer() {
             </div>
 
             {/* COLUMN 4: Statement Quote */}
-            <div className="px-6 py-5 sm:px-8 md:p-8 lg:p-9 flex flex-col justify-start rounded-tr-[1.25rem] sm:rounded-tr-[1.75rem]">
+            <div className="px-6 py-5 sm:px-8 md:p-8 lg:p-9 flex flex-col justify-start">
               <p className="text-xs sm:text-[0.8125rem] font-mono font-medium text-zinc-300 leading-relaxed uppercase max-w-70 tracking-wider">
                 CREATING EXPERIENCES THAT BALANCE AESTHETICS, USABILITY, AND INTENT.
               </p>
@@ -314,7 +314,7 @@ export default function Footer() {
               </a>
 
               {/* COL 3–4: DESIGN AND DEVELOP BY (spans two columns) */}
-              <div className="col-span-2 flex items-center h-13.5 px-8 gap-2 font-mono text-[0.6875rem] sm:text-xs tracking-wider text-zinc-500 uppercase whitespace-nowrap overflow-hidden">
+              <div className="col-span-2 flex items-center justify-center h-13.5 px-8 gap-2 font-mono text-[0.6875rem] sm:text-xs tracking-wider text-zinc-500 uppercase whitespace-nowrap overflow-hidden">
                 <span>DESIGN AND DEVELOP BY</span>
                 <div className="w-5 h-5 rounded-full overflow-hidden border border-zinc-700 bg-zinc-800 shrink-0 inline-flex items-center justify-center">
                   <img
@@ -332,79 +332,14 @@ export default function Footer() {
           </div>
 
           {/* ========================================================= */}
-          {/* BOTTOM HORIZONTAL DIVIDER WITH CROSSHAIRS (ABOVE BRANDING)*/}
+          {/* BOTTOM EDGE CROSSHAIRS (on the box's bottom border)        */}
           {/* ========================================================= */}
-          <div className="relative w-full border-t border-zinc-800">
-            {/* Desktop crosshairs above branding banner */}
-            <div className="hidden lg:block pointer-events-none select-none">
-              <span className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 text-zinc-500 font-mono text-xs z-30">+</span>
-              <span className="absolute top-0 left-1/4 -translate-x-1/2 -translate-y-1/2 text-zinc-500 font-mono text-xs z-30">+</span>
-              <span className="absolute top-0 left-2/4 -translate-x-1/2 -translate-y-1/2 text-zinc-500 font-mono text-xs z-30">+</span>
-              <span className="absolute top-0 left-3/4 -translate-x-1/2 -translate-y-1/2 text-zinc-500 font-mono text-xs z-30">+</span>
-              <span className="absolute top-0 left-full -translate-x-1/2 -translate-y-1/2 text-zinc-500 font-mono text-xs z-30">+</span>
-            </div>
-            {/* Mobile crosshairs */}
-            <div className="lg:hidden pointer-events-none select-none">
-              <span className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 text-zinc-500 font-mono text-xs z-30">+</span>
-              <span className="absolute top-0 left-full -translate-x-1/2 -translate-y-1/2 text-zinc-500 font-mono text-xs z-30">+</span>
-            </div>
-
-            {/* ======================================================= */}
-            {/* GIGANTIC BRANDING: "CODE WITH RL" WITH HOVER ANIMATION  */}
-            {/* ======================================================= */}
-            <Link
-              href="#home"
-              className="group relative w-full overflow-hidden py-5 sm:py-8 md:py-12 lg:py-14 px-2 sm:px-4 flex flex-col items-center justify-center select-none bg-black cursor-pointer focus:outline-none"
-              aria-label="Back to top"
-            >
-              {/* Ambient radial glow bloom on hover */}
-              <div
-                className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none blur-3xl bg-[radial-gradient(circle,rgba(59,130,246,0.25)_0%,rgba(147,51,234,0.15)_50%,transparent_75%)]"
-                aria-hidden="true"
-              />
-
-              {/* Floating 'BACK TO TOP ↑' pill badge on hover */}
-              <div
-                className="absolute top-2 sm:top-4 px-3 py-1 rounded-full bg-zinc-900/90 border border-zinc-700/80 text-[0.625rem] sm:text-xs font-mono tracking-widest text-zinc-300 opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 pointer-events-none shadow-xl z-20 flex items-center gap-1.5"
-                aria-hidden="true"
-              >
-                <span>BACK TO TOP</span>
-                <span className="text-zinc-400 group-hover:-translate-y-0.5 transition-transform duration-200">
-                  ↑
-                </span>
-              </div>
-
-              {/* Interactive kinetic typography */}
-              <h2 className="relative text-[12.8vw] font-black tracking-tighter uppercase leading-[0.8] text-center whitespace-nowrap drop-shadow-sm font-sans flex items-center justify-center z-10">
-                {"CODE WITH RL".split("").map((char, index) => {
-                  if (char === " ") {
-                    return (
-                      <span key={index} className="inline-block w-[0.25em]">
-                        &nbsp;
-                      </span>
-                    );
-                  }
-                  return (
-                    <span
-                      key={index}
-                      className="inline-block text-white transition-all duration-200 ease-out group-hover:text-zinc-400 hover:!text-white hover:-translate-y-2 sm:hover:-translate-y-3.5 hover:scale-108 hover:drop-shadow-[0_0_35px_rgba(255,255,255,0.85)] will-change-transform"
-                    >
-                      {char}
-                    </span>
-                  );
-                })}
-              </h2>
-            </Link>
-
-            {/* Bottom corner crosshairs */}
-            <div className="border-t border-zinc-800 relative w-full h-0 pointer-events-none select-none">
-              <span className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 text-zinc-500 font-mono text-xs z-30">+</span>
-              <span className="hidden lg:block absolute top-0 left-1/4 -translate-x-1/2 -translate-y-1/2 text-zinc-500 font-mono text-xs z-30">+</span>
-              <span className="hidden lg:block absolute top-0 left-2/4 -translate-x-1/2 -translate-y-1/2 text-zinc-500 font-mono text-xs z-30">+</span>
-              <span className="hidden lg:block absolute top-0 left-3/4 -translate-x-1/2 -translate-y-1/2 text-zinc-500 font-mono text-xs z-30">+</span>
-              <span className="absolute top-0 left-full -translate-x-1/2 -translate-y-1/2 text-zinc-500 font-mono text-xs z-30">+</span>
-            </div>
-
+          <div className="pointer-events-none select-none">
+            <span className="absolute bottom-0 left-0 -translate-x-1/2 translate-y-1/2 text-zinc-500 font-mono text-xs z-30">+</span>
+            <span className="hidden lg:block absolute bottom-0 left-1/4 -translate-x-1/2 translate-y-1/2 text-zinc-500 font-mono text-xs z-30">+</span>
+            <span className="hidden lg:block absolute bottom-0 left-2/4 -translate-x-1/2 translate-y-1/2 text-zinc-500 font-mono text-xs z-30">+</span>
+            <span className="hidden lg:block absolute bottom-0 left-3/4 -translate-x-1/2 translate-y-1/2 text-zinc-500 font-mono text-xs z-30">+</span>
+            <span className="absolute bottom-0 left-full -translate-x-1/2 translate-y-1/2 text-zinc-500 font-mono text-xs z-30">+</span>
           </div>
 
         </div>
