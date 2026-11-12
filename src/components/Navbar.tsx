@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface NavItem {
   name: string;
@@ -122,29 +123,21 @@ export default function Navbar() {
             className="flex items-center gap-2.5 group focus:outline-none"
             onClick={() => setActiveSection("HOME")}
           >
-            {/* Glossy 3D Blue Icon (Supaste-style squircle app icon) */}
-            <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-[0.5625rem] bg-gradient-to-b from-[#2e90fa] via-[#1570ef] to-[#175cd3] p-[1px] shadow-[0_2px_8px_rgba(23,92,211,0.5),inset_0_1px_1px_rgba(255,255,255,0.7)] flex items-center justify-center overflow-hidden transition-transform duration-200 group-hover:scale-105">
-              {/* Gloss highlight on top half */}
-              <div className="absolute top-0 left-0 right-0 h-[48%] bg-gradient-to-b from-white/60 to-white/10 rounded-t-[0.5rem] pointer-events-none" />
-              
-              {/* Internal subtle icon graphic */}
-              <svg
-                className="w-4 h-4 text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.3)]"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="m16 18 6-6-6-6" />
-                <path d="m8 6-6 6 6 6" />
-              </svg>
+            {/* RL Logo (white squircle; image scaled up to trim its built-in padding) */}
+            <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-[0.5625rem] bg-white overflow-hidden shadow-[0_2px_8px_rgba(255,255,255,0.15)] transition-transform duration-200 group-hover:scale-105">
+              <Image
+                src="/assets/logo.jpg"
+                alt="RL logo"
+                width={64}
+                height={64}
+                priority
+                className="w-full h-full object-cover scale-[1.6] select-none pointer-events-none"
+              />
             </div>
 
             {/* Brand Text */}
             <span className="font-semibold text-[0.875rem] sm:text-[0.9375rem] tracking-tight text-white transition-opacity group-hover:opacity-90">
-              Portfolio
+              RL Portfolio
             </span>
           </Link>
 
